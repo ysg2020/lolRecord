@@ -8,6 +8,7 @@ import hello.lolRecord.lr.sr.service.RecordSearchBCService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,12 +19,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecordSearchBCServiceImpl implements RecordSearchBCService {
 
+    private final RestTemplate restTemplate;
     private final Logger log = LoggerFactory.getLogger(getClass());
+
     private String SummonerId = null;
     private String Puuid = null;
     @Override
     public SummonerDTO summonerSearch(String nickname) {
-        RestTemplate restTemplate = new RestTemplate();
         SummonerDTO summonerDTO = restTemplate.getForObject(ApiCommon.SummonerUrl + nickname + ApiCommon.ApiKey, SummonerDTO.class);
         SummonerId = summonerDTO.getId();
         Puuid = summonerDTO.getPuuid();
@@ -40,7 +42,6 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
     public List summonerInfoSearch() {
         log.info("summonerInfoSearch BC 서비스 실행!");
         log.info("서머너ID 값은..??={}",SummonerId);
-        RestTemplate restTemplate = new RestTemplate();
         //SummonerInfo summonerInfo = restTemplate.getForObject(SummonerInfoUrl + SummonerId + ApiKey, SummonerInfo.class);
         //라이엇api(League-V4)  summonerInfo를 배열로 받아야 했었음
         List<LeagueEntryDTO> leagueEntryDTO = restTemplate.getForObject(ApiCommon.SummonerInfoUrl + SummonerId + ApiCommon.ApiKey, List.class);
@@ -56,7 +57,6 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
     public List matchSearch() {
         log.info("matchSearch BC 서비스 실행!");
         List matchId = getMatchId();
-        RestTemplate restTemplate = new RestTemplate();
         List<MatchDto> matchDtoList = new ArrayList<>();
         MatchDto matchDto = null;
 
@@ -77,7 +77,6 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
     @Override
     public List getMatchId() {
         log.info("getMatchId BC 서비스 실행!");
-        RestTemplate restTemplate = new RestTemplate();
         List<String> matchIdList = restTemplate.getForObject(ApiCommon.MatchIdUrl + Puuid +"/ids"+ ApiCommon.ApiKey, List.class);
         return matchIdList;
     }
