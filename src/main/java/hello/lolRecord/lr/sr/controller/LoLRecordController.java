@@ -1,6 +1,6 @@
 package hello.lolRecord.lr.sr.controller;
 
-import hello.lolRecord.common.Summoner;
+import hello.lolRecord.common.dto.SummonerDTO;
 import hello.lolRecord.lr.sr.service.RecordSearchSCService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -22,27 +22,40 @@ public class LoLRecordController {
 
     @ResponseBody
     @PostMapping("/test" )
-    public String Requesttest(@RequestBody Summoner summoner){
+    public String Requesttest(@RequestBody SummonerDTO summonerDTO){
         log.info("이 user에는 http 요청 메세지를 객체로 가져옴");
-        log.info("user id 값은?? ={}", summoner.getId());
-        log.info("accountId  값은??={}", summoner.getAccountId());
+        log.info("user id 값은?? ={}", summonerDTO.getId());
+        log.info("accountId  값은??={}", summonerDTO.getAccountId());
         return "ok";
     }
+    @GetMapping("/ui/test" )
+    public String RequestUiTest(){
+        log.info("테스트");
+        return "/ui/test";
+    }
     @ResponseBody
-    @GetMapping("/summonerSearch/{nickname}")
-    public String summonerSearch(@PathVariable String nickname){
-        log.info("summonerSearch 실행!!");
-        Map Elcom = recordSearchSCService.summonerSearch(nickname);
-        log.info("summonerSearch 실행완료!!={}",Elcom);
-        return "ok";
+    @PostMapping("/summonerSearch")
+    public Map summonerSearch(@RequestBody SummonerDTO summonerDTO){
+        log.info("summonerSearch controller 실행!!");
+        Map Elcom = recordSearchSCService.summonerSearch(summonerDTO.getName());
+        log.info("summonerSearch controller 실행완료!!={}",Elcom);
+        return Elcom;
     }
     @ResponseBody
     @GetMapping("/summonerInfoSearch")
-    public String summonerInfoSearch(){
-        log.info("summonerInfoSearch 실행!!");
+    public Map summonerInfoSearch(){
+        log.info("summonerInfoSearch controller 실행!!");
         Map Elcom = recordSearchSCService.summonerInfoSearch();
-        log.info("summonerInfoSearch 실행완료!!={}",Elcom);
-        return "ok";
+        log.info("summonerInfoSearch controller 실행완료!!={}",Elcom);
+        return Elcom;
+    }
+    @ResponseBody
+    @PostMapping("/matchSearch")
+    public Map matchSearch(@RequestBody SummonerDTO summonerDTO){
+        log.info("matchSearch controller 실행!!");
+        Map Elcom = recordSearchSCService.matchSearch();
+        log.info("matchSearch controller 실행완료!!={}",Elcom);
+        return Elcom;
     }
 
 }

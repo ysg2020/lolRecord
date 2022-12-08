@@ -31,4 +31,12 @@ public class RecordSearchSCServiceImpl implements RecordSearchSCService {
         result.put("result",recordSearchBCService.summonerInfoSearch());
         return result;
     }
+
+    @Override
+    public Map matchSearch() {
+        log.info("matchSearch SC 서비스 실행!");
+        Map result = new HashMap();
+        result.put("result",recordSearchBCService.matchSearch());
+        return result;
+    }
 }

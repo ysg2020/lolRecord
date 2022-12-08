@@ -1,9 +1,14 @@
 package hello.lolRecord.lr.sr.service;
 
-import java.util.Map;
+import hello.lolRecord.common.dto.MatchDto;
+import hello.lolRecord.common.dto.SummonerDTO;
+
+import java.util.List;
 
 public interface RecordSearchBCService {
 
-    public Map summonerSearch(String nickname);
-    public Map summonerInfoSearch();
+    public SummonerDTO summonerSearch(String nickname);
+    public List summonerInfoSearch();
+    public List getMatchId();
+    public List matchSearch();
 }
