@@ -7,11 +7,13 @@
 </head>
 <body>
 <input type="text" id="name">
-<input type="button" id="request" value="조회">
+<input type="button" id="summonerRequest" value="소환사 조회">
+<input type="button" id="matchRequest" value="소환사 전적 조회">
 </body>
 </html>
 <script>
-    $("#request").click(function(){
+    var result = null;
+    $("#summonerRequest").click(function(){
 
             // json 형식으로 데이터 set
             var params = JSON.stringify({           //JSON.stringify 사용해야함!!!!!
@@ -31,7 +33,7 @@
                     // 응답코드 > 0000
                     alert(res.code);
                     console.log("res",res);
-                    var result = res["result"];
+                    result = res["result"];
                     console.log("result",result);
                 },
                 error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
@@ -39,5 +41,32 @@
                 }
             });
         });
+    $("#matchRequest").click(function(){
 
+            // json 형식으로 데이터 set
+            var params = JSON.stringify({           //JSON.stringify 사용해야함!!!!!
+                     name     : $("#name").val()
+
+            })
+            console.log("params",params);
+            // ajax 통신
+            $.ajax({
+                type : "POST",            // HTTP method type(GET, POST) 형식이다.
+                url : "/LOLRecord/matchSearch",      // 컨트롤러에서 대기중인 URL 주소이다.
+                headers : {              // Http header
+                  "Content-Type" : "application/json"
+                },
+                data : params,            // Json 형식의 데이터이다.
+                success : function(res){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+                    // 응답코드 > 0000
+                    alert(res.code);
+                    console.log("res",res);
+                    result = res["result"];
+                    console.log("result",result);
+                },
+                error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                    alert("통신 실패.")
+                }
+            });
+        });
 </script>

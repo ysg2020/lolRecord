@@ -8,7 +8,6 @@ import hello.lolRecord.lr.sr.service.RecordSearchBCService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -60,8 +59,8 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         List<MatchDto> matchDtoList = new ArrayList<>();
         MatchDto matchDto = null;
 
-        //20개의 매치정보를 가져오기
-        for(int i=0;i<20;i++) {
+        //MatchCnt 만큼 매치정보를 가져오기
+        for(int i=0;i<ApiCommon.MatchCnt;i++) {
             matchDto = restTemplate.getForObject(ApiCommon.MatchInfoUrl + matchId.get(i) + ApiCommon.ApiKey, MatchDto.class);
             matchDtoList.add(matchDto);
         }

@@ -13,6 +13,10 @@ public class ParticipantDto {
     private int assists;
     private int deaths;
     private boolean win;
+    private int totalDamageDealtToChampions;
+    private int totalDamageTaken;
+    private int goldEarned;
+    private int totalMinionsKilled;
 
 
 }
