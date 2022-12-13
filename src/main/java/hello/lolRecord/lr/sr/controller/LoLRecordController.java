@@ -34,10 +34,10 @@ public class LoLRecordController {
         return "/ui/test";
     }
     @ResponseBody
-    @PostMapping("/summonerSearch")
-    public Map summonerSearch(@RequestBody SummonerDTO summonerDTO){
+    @GetMapping("/summonerSearch")
+    public Map summonerSearch(@RequestParam String nickname){
         log.info("summonerSearch controller 실행!!");
-        Map Elcom = recordSearchSCService.summonerSearch(summonerDTO.getName());
+        Map Elcom = recordSearchSCService.summonerSearch(nickname);
         log.info("summonerSearch controller 실행완료!!={}",Elcom);
         return Elcom;
     }
@@ -50,8 +50,8 @@ public class LoLRecordController {
         return Elcom;
     }
     @ResponseBody
-    @PostMapping("/matchSearch")
-    public Map matchSearch(@RequestBody SummonerDTO summonerDTO){
+    @GetMapping("/matchSearch")
+    public Map matchSearch(){
         log.info("matchSearch controller 실행!!");
         Map Elcom = recordSearchSCService.matchSearch();
         log.info("matchSearch controller 실행완료!!={}",Elcom);
