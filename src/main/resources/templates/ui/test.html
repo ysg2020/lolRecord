@@ -13,21 +13,21 @@
 </body>
 </html>
 <script>
-    var result = null;
+    var sbm_id = null;
     $("#summonerRequest").click(function(){
             var nickname = $("#name").val();
             // ajax 통신
             $.ajax({
                 type : "GET",            // HTTP method type(GET, POST) 형식이다.
                 url : "/LOLRecord/summonerSearch?nickname="+nickname,      // 컨트롤러에서 대기중인 URL 주소이다.
-                success : function(res){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+                success : function(elData){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
                     // 응답코드 > 0000
-                    alert(res.code);
-                    console.log("res",res);
-                    result = res["result"];
+                    alert("조회 성공");
+                    sbm_id = "sbm_001";
+                    sbm_callback(elData);
                 },
                 error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
-                    alert("통신 실패.")
+                    alert("조회 실패.")
                 }
             });
         });
@@ -37,16 +37,35 @@
             $.ajax({
                 type : "GET",            // HTTP method type(GET, POST) 형식이다.
                 url : "/LOLRecord/matchSearch",      // 컨트롤러에서 대기중인 URL 주소이다.
-                success : function(res){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+                success : function(elData){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
                     // 응답코드 > 0000
-                    alert(res.code);
-                    console.log("res",res);
-                    result = res["result"];
-                    console.log("result",result);
+                    alert("조회 성공");
+                    sbm_id = "sbm_002";
+                    sbm_callback(elData);
                 },
                 error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
-                    alert("통신 실패.")
+                    alert("조회 실패.")
                 }
             });
         });
+
+        function sbm_callback(elData){
+            if(sbm_id == "sbm_001") {
+                sbm_001_submitDone(elData);
+            } else if(sbm_id == "sbm_002") {
+                sbm_002_submitDone(elData);
+            }
+        }
+
+        function sbm_001_submitDone(elData){
+            var result = elData["result"];
+            console.log("sbm_001_submitDone");
+            console.log("result",result);
+
+        }
+        function sbm_002_submitDone(elData){
+            var result = elData["result"];
+            console.log("sbm_002_submitDone");
+            console.log("result",result);
+        }
 </script>
