@@ -9,6 +9,7 @@ public class ParticipantDto {
 
     private String summonerName;
     private String lane;
+    private String championName;
     private int kills;
     private int assists;
     private int deaths;
