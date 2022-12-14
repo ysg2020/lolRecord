@@ -18,25 +18,14 @@ public class RecordSearchSCServiceImpl implements RecordSearchSCService {
     private final RecordSearchBCService recordSearchBCService;
     private final Logger log = LoggerFactory.getLogger(getClass());
 
+
     @Override
-    public Map summonerSearch(String nickname) {
+    public Map summonerMatchSearch(String nickname) {
+        log.info("summonerMatchSearch SC 서비스 실행!");
         Map result = new HashMap();
-        result.put("result",recordSearchBCService.summonerSearch(nickname));
-        return result;
-    }
-    @Override
-    public Map summonerInfoSearch() {
-        log.info("summonerInfoSearch SC 서비스 실행!");
-        Map result = new HashMap();
-        result.put("result",recordSearchBCService.summonerInfoSearch());
+        result.put("result",recordSearchBCService.summonerMatchSearch(nickname));
         return result;
     }
 
-    @Override
-    public Map matchSearch() {
-        log.info("matchSearch SC 서비스 실행!");
-        Map result = new HashMap();
-        result.put("result",recordSearchBCService.matchSearch());
-        return result;
-    }
+
 }

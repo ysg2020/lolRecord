@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +25,32 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
 
     private String SummonerId = null;
     private String Puuid = null;
+
     @Override
-    public SummonerDTO summonerSearch(String nickname) {
+    public Map summonerMatchSearch(String nickname) {
+        log.info("summonerMatchSearch BC 서비스 실행!");
+        Map result = new HashMap();
+
+        //API 요청에 필요한 ID 가져오기
+        summonerSearch(nickname);
+
+        //리그정보,매치정보 각각 담아주기
+        result.put("summonerSearch",leagueSearch());
+        result.put("matchSearch",matchSearch());
+
+        return result;
+    }
+
+
+    /**
+     * 내부 함수
+     * summonerSearch()
+     * 소환사 정보나 경기 정보를 가져오기 위한 ID (API 요청에 필요한 ID)들을 가져온다
+     * @return void
+     */
+
+    @Override
+    public void summonerSearch(String nickname) {
         SummonerDTO summonerDTO = restTemplate.getForObject(ApiCommon.SummonerUrl + nickname + ApiCommon.ApiKey, SummonerDTO.class);
         SummonerId = summonerDTO.getId();
         Puuid = summonerDTO.getPuuid();
@@ -33,25 +59,39 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         log.info("summonerLevel = {}", summonerDTO.getSummonerLevel());
         log.info("summonerAccountId = {}", summonerDTO.getAccountId());
         log.info("summonerName = {}", summonerDTO.getName());
-
-        return summonerDTO;
+    }
+    /**
+     * 내부 함수
+     * getMatchId()
+     * 매치 id를 가져온다
+     * @return List : 매치ID 리스트
+     */
+    @Override
+    public List getMatchId() {
+        log.info("getMatchId BC 서비스 실행!");
+        List<String> matchIdList = restTemplate.getForObject(ApiCommon.MatchIdUrl + Puuid +"/ids"+ ApiCommon.ApiKey, List.class);
+        return matchIdList;
     }
 
+    /**
+     * 내부 함수
+     * leagueSearch()
+     * 해당 소환사의 리그 정보를 가져온다
+     * @return List : 리그정보
+     */
     @Override
-    public List summonerInfoSearch() {
-        log.info("summonerInfoSearch BC 서비스 실행!");
-        log.info("서머너ID 값은..??={}",SummonerId);
-        //SummonerInfo summonerInfo = restTemplate.getForObject(SummonerInfoUrl + SummonerId + ApiKey, SummonerInfo.class);
-        //라이엇api(League-V4)  summonerInfo를 배열로 받아야 했었음
+    public List leagueSearch() {
+        log.info("leagueSearch BC 서비스 실행!");
         List<LeagueEntryDTO> leagueEntryDTO = restTemplate.getForObject(ApiCommon.SummonerInfoUrl + SummonerId + ApiCommon.ApiKey, List.class);
-
-        log.info("summonerInfo = {}", leagueEntryDTO);
-        log.info("summonerInfo = {}", leagueEntryDTO.get(0));
-        //왜인지는 모르겠으나 info에 있는 get메소드 실행시 에러남 
-        //구글링해서 찾아본 결과 list 타입으로 변환하려 할떄 발생하는 버그라고함;;
         return leagueEntryDTO;
     }
 
+    /**
+     * 내부 함수
+     * matchSearch()
+     * 매치 정보를 가져온다
+     * @return List : 매치정보
+     */
     @Override
     public List matchSearch() {
         log.info("matchSearch BC 서비스 실행!");
@@ -66,18 +106,4 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         }
         return matchDtoList;
     }
-
-
-
-    /**
-     * 내부 함수
-     * @return 매치ID 리스트
-     */
-    @Override
-    public List getMatchId() {
-        log.info("getMatchId BC 서비스 실행!");
-        List<String> matchIdList = restTemplate.getForObject(ApiCommon.MatchIdUrl + Puuid +"/ids"+ ApiCommon.ApiKey, List.class);
-        return matchIdList;
-    }
-
 }
