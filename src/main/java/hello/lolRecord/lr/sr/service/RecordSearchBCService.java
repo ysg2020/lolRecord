@@ -14,4 +14,5 @@ public interface RecordSearchBCService {
     public List leagueSearch();
     public List matchSearch();
     public Map winLoseing();
+    public Map top3();
 }
