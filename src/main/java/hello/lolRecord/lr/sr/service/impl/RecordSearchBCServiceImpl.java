@@ -1,10 +1,7 @@
 package hello.lolRecord.lr.sr.service.impl;
 
 import hello.lolRecord.common.*;
-import hello.lolRecord.common.dto.MatchDto;
-import hello.lolRecord.common.dto.ParticipantDto;
-import hello.lolRecord.common.dto.SummonerDTO;
-import hello.lolRecord.common.dto.LeagueEntryDTO;
+import hello.lolRecord.common.dto.*;
 import hello.lolRecord.lr.sr.service.RecordSearchBCService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -12,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -115,36 +109,56 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
     /**
      * 내부 함수
      * winLoseing()
+     * <logic>
+     *     총 게임수 반복
+     *     for{
+     *          검색한 닉네임기준으로 가져오기 위한 반복
+     *          for{
+     *              검색한 닉네임의 승패 리스트 생성
+     *          }
+     *     }
+     *
+     *     ...
+     *
+     *     for{
+     *        만든 승패 리스트로  첫번째 승패 여부와 비교 후 cnt 리턴
+     *     }
+     * </logic>
      * 연승,연패 구분 값 및 횟수를 가져온다
      * @return Map : winLoseingCnt , winLose
      */
     @Override
     public Map winLoseing() {
         log.info("winLoseing BC 서비스 실행!");
-        List matchId = getMatchId();
-        List<Boolean> winLoseingList = new ArrayList<Boolean>(); //1게임의 승패들을 담은 리스트
-        MatchDto matchDto = null;
-        boolean winLoseing = true; //1게임의 승패
+        //전체 매치 정보
+        List<MatchDto> matchDtoList = matchSearch();
+        List<ParticipantDto> participants;
+
+        //검색한 닉네임 기준으로 matchCnt 만큼의 승패 리스트
+        List<Boolean> winLoseingList = new ArrayList<Boolean>();
+
         Map result = new HashMap();
 
-        //matchCnt 만큼 승패를 가져와 리스트에 담아주기
-        //총 matchCnt 만큼 반복
+        //matchCnt 만큼 반복해 승패를 가져와 리스트에 담아주기
         for(int i=0;i<ApiCommon.MatchCnt;i++) {
-            matchDto = restTemplate.getForObject(ApiCommon.MatchInfoUrl + matchId.get(i) + ApiCommon.ApiKey, MatchDto.class);
-            //검색한 닉네임 기준으로 가져오기
-            //1게임에서의 반복 (1게임에 10명이 참여함)
-            for(int j=0;j<10;j++){
-                String nickname = matchDto.getInfo().getParticipants().get(j).getSummonerName();
-                if(nickname.equals(summonerName)) {
-                    winLoseing = matchDto.getInfo().getParticipants().get(j).isWin();
-                    winLoseingList.add(winLoseing);
+            participants = matchDtoList.get(i).getInfo().getParticipants();
+            //검색한 닉네임 기준으로 가져오기 위한 반복 (1게임에 10명이 참여함)
+            for (int j = 0; j < 10; j++) {
+                String nickname = participants.get(j).getSummonerName();
+                if (nickname.equals(summonerName)) {
+                    winLoseingList.add(participants.get(j).isWin());
                 }
             }
         }
 
-        boolean firstWinLose = winLoseingList.get(0); //연승 연패는 첫번째 게임 기준이므로 첫번째 게임승패 담아줌
-        String winLoseingFlag = "Y"; //연승 연패 끊어질때 사용하는 변수
-        int winLoseingCnt = 0; //연승 연패 횟수
+        //연승 연패는 첫번째 게임 기준이므로 첫번째 게임승패 담아줌
+        boolean firstWinLose = winLoseingList.get(0);
+
+        //연승 연패 끊어질때 사용하는 변수
+        String winLoseingFlag = "Y";
+
+        //연승 연패 횟수
+        int winLoseingCnt = 0;
 
         if(firstWinLose){
             MapdataUtil.setString(result,"winLose","연승");
@@ -172,18 +186,12 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
      *         1게임마다 변수 초기화
      *         ...
      *         for{
-     *             최대값 가져오는 로직  >> 1등
+     *              1명마다 변수 초기화
+     *              데미지와 그 데미지에 해당하는 닉네임만 뽑아 담은 리스트 생성
      *         }
-     *         ...
-     *         앞서 가져온 최대값을 뺀 배열 사용 (remove)
-     *         for{
-     *             최대값 가져오는 로직  >> 2등
-     *         }
-     *         ...
-     *         앞서 가져온 최대값을 뺀 배열 사용 (remove)
-     *         for{
-     *             최대값 가져오는 로직  >>  3등
-     *         }
+     *
+     *         만든 리스트를 데미지 기준으로 오름차순 정렬
+     *         오름차순 정렬된 리스트의 맨 마지막이 1위
      *         Map result의 value값으로 Map bizOutput을 1게임마다 각각 담아줌
      *     }
      *     result 리턴
@@ -201,92 +209,48 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
      */
     @Override
     public Map top3() {
+        log.info("top3 BC 서비스 실행!");
+        //전체 매치 정보
         List<MatchDto> matchDtoList = matchSearch();
         List<ParticipantDto> participants;
 
-        //매치정보에서 데미지와 그데미지에 해당하는 닉네임만 뽑아 담은 리스트
-        List<Integer> damegeList;
-        List<String> summonerDamegeList;
-
-        //max값 비교 변수
-        int max1st;
-        int max2nd;
-        int max3rd;
-
-        //max값 인덱스 변수
-        int index1st;
-        int index2nd;
-
-        //max값에 해당하는 닉네임
-        String summoner1stDamege;
-        String summoner2ndDamege;
-        String summoner3rdDamege;
+        //전체 매치 정보에서 데미지와 그데미지에 해당하는 닉네임만 뽑아 담은 리스트
+        List<Top3Dto> damegeList;
 
         Map bizOutput;
         Map result = new HashMap();
+        Top3Dto top3Dto;
 
         //총 MatchCnt 만큼 반복
         for(int i=0;i<ApiCommon.MatchCnt;i++){
             //1게임마다 초기화
-            max1st = Integer.MIN_VALUE;
-            max2nd = Integer.MIN_VALUE;
-            max3rd = Integer.MIN_VALUE;
-            index1st = 0;
-            index2nd = 0;
-            summoner1stDamege = null;
-            summoner2ndDamege = null;
-            summoner3rdDamege = null;
-            damegeList = new ArrayList<>();
-            summonerDamegeList = new ArrayList<>();
+            damegeList = new ArrayList<Top3Dto>();
             bizOutput = new HashMap();
 
-            //매치 정보
+            //매치(참여자) 정보
             participants = matchDtoList.get(i).getInfo().getParticipants();
 
             //1게임에 10명 참여
             for(int j=0;j<10;j++){
-                int Damege1st = participants.get(j).getTotalDamageDealtToChampions();
-                damegeList.add(Damege1st);
-                summonerDamegeList.add(participants.get(j).getSummonerName());
-                if(max1st < Damege1st) {
-                    max1st = Damege1st;
-                    index1st = j;
-                    summoner1stDamege = participants.get(j).getSummonerName();
-                }
+                top3Dto = new Top3Dto();
+                top3Dto.setDamege(participants.get(j).getTotalDamageDealtToChampions());
+                top3Dto.setSummonerName(participants.get(j).getSummonerName());
+                damegeList.add(top3Dto);
+
             }
-            MapdataUtil.setInt(bizOutput,"Damege1st",max1st);
-            MapdataUtil.setString(bizOutput,"summoner1stDamege",summoner1stDamege);
 
-            //1등 제외
-            damegeList.remove(index1st);
-            summonerDamegeList.remove(index1st);
+            //데미지 기준으로 오름차순 정렬
+            damegeList.sort(Comparator.comparing((Top3Dto top3DtoSort) -> (Integer) top3DtoSort.getDamege()));
 
-            //1등 제외시켜 9명
-            for(int k=0;k<9;k++){
-                int Damege2nd = damegeList.get(k);
-                if(max2nd < Damege2nd) {
-                    max2nd = Damege2nd;
-                    index2nd = k;
-                    summoner2ndDamege = summonerDamegeList.get(k);
-                }
-            }
-            MapdataUtil.setInt(bizOutput,"Damege2nd",max2nd);
-            MapdataUtil.setString(bizOutput,"summoner2ndDamege",summoner2ndDamege);
-
-            //2등 제외
-            damegeList.remove(index2nd);
-            summonerDamegeList.remove(index2nd);
-
-            //2등 제외시켜 8명
-            for(int g=0;g<8;g++){
-                int Damege3rd = damegeList.get(g);
-                if(max3rd < Damege3rd) {
-                    max3rd = Damege3rd;
-                    summoner3rdDamege = summonerDamegeList.get(g);
-                }
-            }
-            MapdataUtil.setInt(bizOutput,"Damege3rd",max3rd);
-            MapdataUtil.setString(bizOutput,"summoner3rdDamege",summoner3rdDamege);
+            //1위
+            MapdataUtil.setInt(bizOutput,"Damege1st",damegeList.get(9).getDamege());
+            MapdataUtil.setString(bizOutput,"summoner1stDamege",damegeList.get(9).getSummonerName());
+            //2위
+            MapdataUtil.setInt(bizOutput,"Damege2nd",damegeList.get(8).getDamege());
+            MapdataUtil.setString(bizOutput,"summoner2ndDamege",damegeList.get(8).getSummonerName());
+            //3위
+            MapdataUtil.setInt(bizOutput,"Damege3rd",damegeList.get(7).getDamege());
+            MapdataUtil.setString(bizOutput,"summoner3rdDamege",damegeList.get(7).getSummonerName());
 
             MapdataUtil.setMap(result,"matchDamegeTOP3::"+i,bizOutput);
 
