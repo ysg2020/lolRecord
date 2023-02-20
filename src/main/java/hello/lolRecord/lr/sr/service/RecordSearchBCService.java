@@ -10,9 +10,11 @@ public interface RecordSearchBCService {
 
     public void summonerSearch(String nickname);
     public Map summonerMatchSearch(String nickname);
+    public Map summonerMatchSearch(String nickname,String championName);
     public List getMatchId();
     public List leagueSearch();
     public List matchSearch();
+    public List matchSearch(String nickname ,String championName);
     public Map winLoseing();
     public Map top3();
 }
