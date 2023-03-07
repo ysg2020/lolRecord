@@ -51,7 +51,7 @@
         <block th:each = "rResult : ${Result.info.participants}">
             <tr>
                 <td th:text ="${rResult.summonerName}"></td>
-                <td th:text ="${rResult.championName}"></td>
+                <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/}+${rResult.championName}+@{.png}"></td>
                 <td th:text ="${rResult.kills}"></td>
                 <td th:text ="${rResult.deaths}"></td>
                 <td th:text ="${rResult.assists}"></td>
