@@ -1,4 +1,4 @@
-package hello.lolRecord.common.dto;
+package hello.lolRecord.lr.sr.dto;
 
 import lombok.Getter;
 import lombok.Setter;

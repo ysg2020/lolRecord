@@ -1,7 +1,7 @@
 package hello.lolRecord.lr.sr.service.impl;
 
 import hello.lolRecord.common.*;
-import hello.lolRecord.common.dto.*;
+import hello.lolRecord.lr.sr.dto.*;
 import hello.lolRecord.lr.sr.service.RecordSearchBCService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

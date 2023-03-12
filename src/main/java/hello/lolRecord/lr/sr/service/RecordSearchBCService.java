@@ -1,8 +1,5 @@
 package hello.lolRecord.lr.sr.service;
 
-import hello.lolRecord.common.dto.MatchDto;
-import hello.lolRecord.common.dto.SummonerDTO;
-
 import java.util.List;
 import java.util.Map;
 
