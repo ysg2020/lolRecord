@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/LOLRecord")
+@RequestMapping("/LOLRecord/search")
 @RequiredArgsConstructor
 public class LoLRecordController {
 

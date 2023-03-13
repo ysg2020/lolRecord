@@ -23,22 +23,34 @@
 
 <table border ="1">
     <tr>
-        <td>summonerName</td>
-        <td>championName</td>
+        <td>win</td>
+        <td>champion</td>
         <td>kills</td>
         <td>deaths</td>
         <td>assists</td>
     </tr>
-    <tr th:each ="Result : ${result.result.matchSearch}">
-        <block th:each = "rResult : ${Result.info.participants}">
-            <td th:text ="${rResult.summonerName}"></td>
-            <td th:text ="${rResult.championName}"></td>
-            <td th:text ="${rResult.kills}"></td>
-            <td th:text ="${rResult.deaths}"></td>
-            <td th:text ="${rResult.assists}"></td>
+    <block th:each ="Result : ${result.result.myMatchSearch}">
+        <block th:if="${Result.win}">
+            <tr bgcolor="#D4E4FE">
+                <td>승</td>
+                <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/}+${Result.championName}+@{.png}"></td>
+                <td th:text ="${Result.kills}"></td>
+                <td th:text ="${Result.deaths}"></td>
+                <td th:text ="${Result.assists}"></td>
+            </tr>
         </block>
-    </tr>
+        <block th:unless="${Result.win}">
+            <tr bgcolor="#FFEEEE">
+                <td>패</td>
+                <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/}+${Result.championName}+@{.png}"></td>
+                <td th:text ="${Result.kills}"></td>
+                <td th:text ="${Result.deaths}"></td>
+                <td th:text ="${Result.assists}"></td>
+            </tr>
+        </block>
+    </block>
 </table>
+
 <table border ="1">
     <tr>
         <td>summonerName</td>
@@ -59,7 +71,6 @@
         </block>
     </block>
 </table>
-<img src="http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/Aatrox.png">
 </body>
 </html>
 <script>

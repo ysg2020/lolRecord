@@ -11,7 +11,9 @@ public interface RecordSearchBCService {
     public List getMatchId();
     public List leagueSearch();
     public List matchSearch();
-    public List matchSearch(String nickname ,String championName);
+    public List matchSearchChamp(String nickname ,String championName);
     public Map winLoseing();
     public Map top3();
+    public List myMatchSearch(String nickname);
+    public List mymatchSearchChamp(String nickname,String championName);
 }

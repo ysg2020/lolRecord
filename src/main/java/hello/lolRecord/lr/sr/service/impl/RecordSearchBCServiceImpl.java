@@ -33,6 +33,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         //리그정보,매치정보 각각 담아주기
         result.put("summonerSearch",leagueSearch());
         result.put("matchSearch",matchSearch());
+        result.put("myMatchSearch",myMatchSearch(nickname));
         result.put("winLoseing",winLoseing());
         result.put("top3",top3());
 
@@ -48,7 +49,8 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
 
         //리그정보,매치정보 각각 담아주기
         result.put("summonerSearch",leagueSearch());
-        result.put("matchSearch",matchSearch(nickname,championName));
+        result.put("matchSearch",matchSearchChamp(nickname,championName));
+        result.put("myMatchSearch",mymatchSearchChamp(nickname,championName));
         result.put("winLoseing",winLoseing());
         result.put("top3",top3());
 
@@ -103,7 +105,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
     /**
      * 내부 함수
      * matchSearch()
-     * 매치 정보를 가져온다
+     * 모든 참여자 매치 정보를 가져온다
      * @return List : 매치정보
      */
     @Override
@@ -120,11 +122,10 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         }
         return matchDtoList;
     }
-
     /**
      * 내부 함수
      * matchSearch(championName)
-     * 챔피언별 매치 정보를 가져온다
+     * 검색한 참여자만의 매치 정보를 가져온다
      * <logic>
      *     for 경기 수
      *       for 1경기안에 검색하려는 챔피언과 닉네임 찾기
@@ -133,7 +134,66 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
      * @return List : 매치정보
      */
     @Override
-    public List matchSearch(String nickname ,String championName) {
+    public List myMatchSearch(String nickname) {
+        log.info("myMatchSearch BC 서비스 실행!");
+        List matchId = getMatchId();
+        List<ParticipantDto> participantDtoList = new ArrayList<>();
+        MatchDto matchDto = null;
+
+        //MatchCnt 만큼 매치정보를 가져오기
+        for(int i=0;i<ApiCommon.MatchCnt;i++) {
+            matchDto = restTemplate.getForObject(ApiCommon.MatchInfoUrl + matchId.get(i) + ApiCommon.ApiKey, MatchDto.class);
+            for (int j = 0; j < 10; j++) {
+                if (matchDto.getInfo().getParticipants().get(j).getSummonerName().equals(nickname)) {
+                    participantDtoList.add(matchDto.getInfo().getParticipants().get(j));
+                }
+            }
+        }
+        return participantDtoList;
+    }
+    /**
+     * 내부 함수
+     * matchSearch(championName)
+     * 검색한 참여자의 챔피언별 매치 정보만을 가져온다
+     * <logic>
+     *     for 경기 수
+     *       for 1경기안에 검색하려는 챔피언과 닉네임 찾기
+     *       if 찾아서 있으면 List에 담아줌
+     * </logic>
+     * @return List : 매치정보
+     */
+    @Override
+    public List mymatchSearchChamp(String nickname ,String championName) {
+        log.info("matchSearch(championName) BC 서비스 실행!");
+        List matchId = getMatchId();
+        List<ParticipantDto> participantDtoList = new ArrayList<>();
+        MatchDto matchDto = null;
+
+        //MatchCnt 만큼 매치정보를 가져오기
+        for(int i=0;i<ApiCommon.MatchCnt;i++) {
+            matchDto = restTemplate.getForObject(ApiCommon.MatchInfoUrl + matchId.get(i) + ApiCommon.ApiKey, MatchDto.class);
+            for (int j = 0; j < 10; j++) {
+                if (matchDto.getInfo().getParticipants().get(j).getChampionName().equals(championName)
+                        && matchDto.getInfo().getParticipants().get(j).getSummonerName().equals(nickname)) {
+                    participantDtoList.add(matchDto.getInfo().getParticipants().get(j));
+                }
+            }
+        }
+        return participantDtoList;
+    }
+    /**
+     * 내부 함수
+     * matchSearch(championName)
+     * 검색한 참여자의 챔피언별  모든 매치 정보를 가져온다
+     * <logic>
+     *     for 경기 수
+     *       for 1경기안에 검색하려는 챔피언과 닉네임 찾기
+     *       if 찾아서 있으면 List에 담아줌
+     * </logic>
+     * @return List : 매치정보
+     */
+    @Override
+    public List matchSearchChamp(String nickname ,String championName) {
         log.info("matchSearch(championName) BC 서비스 실행!");
         List matchId = getMatchId();
         List<MatchDto> matchDtoList = new ArrayList<>();
