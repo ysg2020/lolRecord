@@ -33,5 +33,18 @@ public class RecordSearchSCServiceImpl implements RecordSearchSCService {
         result.put("result",recordSearchBCService.summonerMatchSearch(nickname,championName));
         return result;
     }
-
+    @Override
+    public Map summonerMatchSearchDtl(String nickname, int matchNum) {
+        log.info("summonerMatchSearch SC 서비스 실행!");
+        Map result = new HashMap();
+        result.put("result",recordSearchBCService.summonerMatchSearchDtl(nickname,matchNum));
+        return result;
+    }
+    @Override
+    public Map summonerMatchSearchDtl(String nickname,String championName, int matchNum) {
+        log.info("summonerMatchSearch SC 서비스 실행!");
+        Map result = new HashMap();
+        result.put("result",recordSearchBCService.summonerMatchSearchDtl(nickname,championName,matchNum));
+        return result;
+    }
 }

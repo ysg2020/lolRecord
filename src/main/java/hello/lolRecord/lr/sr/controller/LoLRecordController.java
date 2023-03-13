@@ -35,7 +35,7 @@ public class LoLRecordController {
     }
 
     @ResponseBody
-    @GetMapping(value = {"/summonerMatchSearchV2/{nickname}/{championName}","/summonerMatchSearchV2/{nickname}"})
+   // @GetMapping(value = {"/summonerMatchSearchV2/{nickname}/{championName}","/summonerMatchSearchV2/{nickname}"})
     public ModelAndView summonerMatchSearchV2(@PathVariable String nickname ,@PathVariable(required = false) String championName, ModelAndView mv){
         log.info("summonerMatchSearchV2 controller 실행!!");
 //        mv.addAttribute("result",recordSearchSCService.summonerMatchSearch(nickname));
@@ -51,5 +51,23 @@ public class LoLRecordController {
         log.info("summonerMatchSearchV2 Result : {}",mv);
         return mv;
     }
+    @ResponseBody
+    @GetMapping(value = {"/summonerMatchSearchV2/{nickname}/{matchNum}/{championName}","/summonerMatchSearchV2/{nickname}/{matchNum}"})
+    public ModelAndView summonerMatchSearchV2_Dtl(@PathVariable String nickname ,@PathVariable int matchNum,@PathVariable(required = false) String championName, ModelAndView mv){
+        log.info("summonerMatchSearchV2 controller 실행!!");
+//        mv.addAttribute("result",recordSearchSCService.summonerMatchSearch(nickname));
+//        mv.setViewName("ui/test"); CommonConfig 와 WebConfigure 사용해서 공통으로 뷰네임 셋팅!
+        //참고 링크 : https://junseokdev.tistory.com/20
+        if(championName == null){
+            log.info("summonerMatchSearchV2 championName X");
+            mv.addObject("result",recordSearchSCService.summonerMatchSearchDtl(nickname,matchNum));
+        }else {
+            log.info("summonerMatchSearchV2 championName O");
+            mv.addObject("result", recordSearchSCService.summonerMatchSearchDtl(nickname, championName,matchNum));
+        }
+        log.info("summonerMatchSearchV2 Result : {}",mv);
+        return mv;
+    }
+
 
 }

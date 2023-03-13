@@ -56,6 +56,63 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
 
         return result;
     }
+    @Override
+    public Map summonerMatchSearchDtl(String nickname ,int matchNum) {
+        log.info("summonerMatchSearchDtl  BC 서비스 실행!");
+        Map result = new HashMap();
+
+        //API 요청에 필요한 ID 가져오기
+        summonerSearch(nickname);
+
+        //리그정보,매치정보 각각 담아주기
+        result.put("summonerSearch",leagueSearch());
+        //result.put("matchSearch",matchSearch());
+        result.put("myMatchSearch",myMatchSearch(nickname));
+        result.put("matchSearchDtl",matchSearchDtl(nickname,matchNum));
+        result.put("winLoseing",winLoseing());
+        result.put("top3",top3());
+
+        return result;
+    }
+    @Override
+    public Map summonerMatchSearchDtl(String nickname ,String championName,int matchNum) {
+        log.info("summonerMatchSearchDtl  BC 서비스 실행!");
+        Map result = new HashMap();
+        Map rResult = new HashMap();
+        //API 요청에 필요한 ID 가져오기
+        summonerSearch(nickname);
+
+        //리그정보,매치정보 각각 담아주기
+        result.put("summonerSearch",leagueSearch());
+        //result.put("matchSearch",matchSearch());
+        result.put("myMatchSearch",mymatchSearchChamp(nickname,championName));
+
+        MatchDto matchDto = (MatchDto) matchSearchChamp(nickname, championName).get(matchNum);
+        rResult.put("matchDtoDtl",matchDto);
+
+        result.put("matchSearchDtl",rResult);
+        result.put("winLoseing",winLoseing());
+        result.put("top3",top3());
+
+        return result;
+    }
+    /**
+     * 내부 함수
+     * matchSearch()
+     * matchNum번쨰 매치 정보를 가져온다
+     * @return List : 매치정보
+     */
+    @Override
+    public Map matchSearchDtl(String nickname,int matchNum) {
+        log.info("matchSearchDtl BC 서비스 실행!");
+        List matchId = getMatchId();
+        Map result = new HashMap();
+        MatchDto matchDtoDtl = restTemplate.getForObject(ApiCommon.MatchInfoUrl + matchId.get(matchNum) + ApiCommon.ApiKey, MatchDto.class);
+        result.put("matchDtoDtl",matchDtoDtl);
+        return result;
+    }
+
+
 
     /**
      * 내부 함수
