@@ -24,7 +24,11 @@ public class LoLRecordController {
         log.info("테스트");
         return "/ui/test";
     }
-
+    @GetMapping
+    public String main(){
+        log.info("메인");
+        return "ui/main";
+    }
     @ResponseBody
     @GetMapping("/summonerMatchSearch")
     public Map summonerMatchSearch(@RequestParam String nickname){

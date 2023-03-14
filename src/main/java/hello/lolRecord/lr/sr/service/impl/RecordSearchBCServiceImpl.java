@@ -32,7 +32,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
 
         //리그정보,매치정보 각각 담아주기
         result.put("summonerSearch",leagueSearch());
-        result.put("matchSearch",matchSearch());
+        result.put("matchSearchDtl",null);
         result.put("myMatchSearch",myMatchSearch(nickname));
         result.put("winLoseing",winLoseing());
         result.put("top3",top3());

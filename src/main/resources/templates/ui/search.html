@@ -2,14 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Search Page</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 <input type="text" id="name">
-<input type="button" id="summonerRequest" value="소환사 조회">
-<input type="button" id="matchRequest" value="소환사 전적 조회">
-<div th:text ="${result.result.summonerSearch[0].summonerName}">소환사 닉네임</div>
+<input type="button" onclick="search()" id="matchRequest" value="소환사 전적 조회">
+<!--<div th:text ="${result.result.summonerSearch[0].summonerName}">소환사 닉네임</div>-->
 <!--<table border ="1">
     <tr>
         <td>게임 이름</td>
@@ -50,6 +49,9 @@
         </block>
     </block>
 </table>
+
+<!--초기화면 (특정 매치를 선택하기 전에는 표시하지 않음)-->
+<block th:if ="${result.result.matchSearchDtl != null}">
 <table border ="1">
     <tr>
         <td>summonerName</td>
@@ -58,6 +60,7 @@
         <td>deaths</td>
         <td>assists</td>
     </tr>
+
     <block th:each ="Result : ${result.result.matchSearchDtl.matchDtoDtl.info.participants}">
             <tr>
                 <td th:text ="${Result.summonerName}"></td>
@@ -68,6 +71,7 @@
             </tr>
     </block>
 </table>
+</block>
 
 <!--모든 참여자 매치 정보-->
 <!--<table border ="1">
@@ -93,59 +97,8 @@
 </body>
 </html>
 <script>
-    var sbm_id = null;
-    $("#summonerRequest").click(function(){
-            var nickname = $("#name").val();
-            // ajax 통신
-            $.ajax({
-                type : "GET",            // HTTP method type(GET, POST) 형식이다.
-                url : "/LOLRecord/summonerSearch?nickname="+nickname,      // 컨트롤러에서 대기중인 URL 주소이다.
-                success : function(elData){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
-                    // 응답코드 > 0000
-                    alert("조회 성공");
-                    sbm_id = "sbm_001";
-                    sbm_callback(elData);
-                },
-                error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
-                    alert("조회 실패.")
-                }
-            });
-        });
-    $("#matchRequest").click(function(){
-
-            // ajax 통신
-            $.ajax({
-                type : "GET",            // HTTP method type(GET, POST) 형식이다.
-                url : "/LOLRecord/matchSearch",      // 컨트롤러에서 대기중인 URL 주소이다.
-                success : function(elData){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
-                    // 응답코드 > 0000
-                    alert("조회 성공");
-                    sbm_id = "sbm_002";
-                    sbm_callback(elData);
-                },
-                error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
-                    alert("조회 실패.")
-                }
-            });
-        });
-
-        function sbm_callback(elData){
-            if(sbm_id == "sbm_001") {
-                sbm_001_submitDone(elData);
-            } else if(sbm_id == "sbm_002") {
-                sbm_002_submitDone(elData);
-            }
-        }
-
-        function sbm_001_submitDone(elData){
-            var result = elData["result"];
-            console.log("sbm_001_submitDone");
-            console.log("result",result);
-
-        }
-        function sbm_002_submitDone(elData){
-            var result = elData["result"];
-            console.log("sbm_002_submitDone");
-            console.log("result",result);
-        }
+function search() {
+    var nickname = $("#name").val();
+    location.href='/LOLRecord/search/summonerMatchSearchV2dtl/'+nickname+'/0';
+}
 </script>
