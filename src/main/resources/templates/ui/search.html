@@ -8,7 +8,6 @@
 <body>
 <input type="text" id="name">
 <input type="button" onclick="search()" id="matchRequest" value="소환사 전적 조회">
-<!--<div th:text ="${result.result.summonerSearch[0].summonerName}">소환사 닉네임</div>-->
 <!--<table border ="1">
     <tr>
         <td>게임 이름</td>
@@ -19,32 +18,50 @@
         <td th:text ="${Result.info.gameStartTimestamp}">게임스탬프</td>
     </tr>
 </table>-->
-
-<table border ="1">
+<div id ="summonerName" th:text ="${result.result.summonerSearch[0].summonerName}">소환사 닉네임</div>
+<div>
+    <span th:text ="${result.result.summonerSearch[0].tier}">소환사 티어</span>
+    <span th:text ="${result.result.summonerSearch[0].rank}">소환사 랭크</span>
+    <span th:text ="${result.result.summonerSearch[0].leaguePoints}">소환사 리그점수</span>
+    <label>점</label>
+</div>
+<div>
+    <span th:text ="${result.result.summonerSearch[0].wins}">소환사 승리횟수</span>
+    <label>승</label>
+    <span th:text ="${result.result.summonerSearch[0].losses}">소환사 패배횟수</span>
+    <label>패</label>
+</div>
+<table id="match" border ="1">
     <tr>
+        <td>index</td>
         <td>win</td>
         <td>champion</td>
         <td>kills</td>
         <td>deaths</td>
         <td>assists</td>
+        <td>+</td>
     </tr>
-    <block th:each ="Result : ${result.result.myMatchSearch}">
+    <block th:each ="Result,ResultStat : ${result.result.myMatchSearch}">
         <block th:if="${Result.win}">
             <tr bgcolor="#D4E4FE">
+                <td th:text="${ResultStat.index}"></td> <!--현재 index  -->
                 <td>승</td>
                 <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/}+${Result.championName}+@{.png}"></td>
                 <td th:text ="${Result.kills}"></td>
                 <td th:text ="${Result.deaths}"></td>
                 <td th:text ="${Result.assists}"></td>
+                <td onclick="searchDtl()">+</td>
             </tr>
         </block>
         <block th:unless="${Result.win}">
             <tr bgcolor="#FFEEEE">
+                <td th:text="${ResultStat.index}"></td> <!--현재 index  -->
                 <td>패</td>
                 <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/}+${Result.championName}+@{.png}"></td>
                 <td th:text ="${Result.kills}"></td>
                 <td th:text ="${Result.deaths}"></td>
                 <td th:text ="${Result.assists}"></td>
+                <td onclick="searchDtl()">+</td>
             </tr>
         </block>
     </block>
@@ -99,6 +116,18 @@
 <script>
 function search() {
     var nickname = $("#name").val();
-    location.href='/LOLRecord/search/summonerMatchSearchV2dtl/'+nickname+'/0';
+    location.href='/LOLRecord/search/summonerMatchSearchV2/'+nickname;
+}
+function searchDtl() {
+    $("#match tr").click(function(){
+        var nickname = $("#summonerName").text();
+        console.log("nickname",nickname);
+        var tr = $(this);
+        var td = tr.children();
+        var no = parseInt(td.eq(0).text());
+        var url ='/LOLRecord/search/summonerMatchSearchV2dtl/'+nickname+'/'+no;
+        location.href=url;
+
+    });
 }
 </script>
