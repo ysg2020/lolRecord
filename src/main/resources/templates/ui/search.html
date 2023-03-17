@@ -76,6 +76,10 @@
         <td>kills</td>
         <td>deaths</td>
         <td>assists</td>
+        <td>damage</td>
+        <td>takenDamage</td>
+        <td>gold</td>
+        <td>cs</td>
     </tr>
 
     <block th:each ="Result : ${result.result.matchSearchDtl.matchDtoDtl.info.participants}">
@@ -85,6 +89,10 @@
                 <td th:text ="${Result.kills}"></td>
                 <td th:text ="${Result.deaths}"></td>
                 <td th:text ="${Result.assists}"></td>
+                <td th:text ="${Result.totalDamageDealtToChampions}"></td>
+                <td th:text ="${Result.totalDamageTaken}"></td>
+                <td th:text ="${Result.goldEarned}"></td>
+                <td th:text ="${Result.totalMinionsKilled}+${Result.neutralMinionsKilled}"></td>
             </tr>
     </block>
 </table>

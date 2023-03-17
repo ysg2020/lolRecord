@@ -18,6 +18,7 @@ public class ParticipantDto {
     private int totalDamageTaken;
     private int goldEarned;
     private int totalMinionsKilled;
+    private int neutralMinionsKilled;
 
 
 }
