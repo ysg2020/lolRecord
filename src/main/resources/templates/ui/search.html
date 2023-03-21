@@ -31,6 +31,12 @@
     <span th:text ="${result.result.summonerSearch[0].losses}">소환사 패배횟수</span>
     <label>패</label>
 </div>
+<div>
+    <label>현재 </label>
+    <span th:text ="${result.result.winLoseing.winLoseingCnt}">횟수</span>
+    <span th:text ="${result.result.winLoseing.winLose}">연승 연패 여부</span>
+    <label>중입니다!!</label>
+</div>
 <table id="match" border ="1">
     <tr>
         <td>index</td>
@@ -69,6 +75,21 @@
 
 <!--초기화면 (특정 매치를 선택하기 전에는 표시하지 않음)-->
 <block th:if ="${result.result.matchSearchDtl != null}">
+    <div>
+        <label>데미지 1위 : </label>
+        <span th:text="${result.result.top3.Damege1st}">데미지 1위 닉네임</span>
+        <span th:text="${result.result.top3.summoner1stDamege}">1위 데미지량</span>
+    </div>
+    <div>
+        <label>데미지 2위: </label>
+        <span th:text="${result.result.top3.Damege2nd}">데미지 2위 닉네임</span>
+        <span th:text="${result.result.top3.summoner2ndDamege}">2위 데미지량</span>
+    </div>
+    <div>
+        <label>데미지 3위 : </label>
+        <span th:text="${result.result.top3.Damege3rd}">데미지 3위 닉네임</span>
+        <span th:text="${result.result.top3.summoner3rdDamege}">3위 데미지량</span>
+    </div>
 <table border ="1">
     <tr>
         <td>summonerName</td>

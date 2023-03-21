@@ -35,7 +35,6 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         result.put("matchSearchDtl",null);
         result.put("myMatchSearch",myMatchSearch(nickname));
         result.put("winLoseing",winLoseing());
-        result.put("top3",top3());
 
         return result;
     }
@@ -52,7 +51,6 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         result.put("matchSearch",matchSearchChamp(nickname,championName));
         result.put("myMatchSearch",mymatchSearchChamp(nickname,championName));
         result.put("winLoseing",winLoseing());
-        result.put("top3",top3());
 
         return result;
     }
@@ -70,7 +68,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         result.put("myMatchSearch",myMatchSearch(nickname));
         result.put("matchSearchDtl",matchSearchDtl(nickname,matchNum));
         result.put("winLoseing",winLoseing());
-        result.put("top3",top3());
+        result.put("top3",top3(matchNum));
 
         return result;
     }
@@ -92,7 +90,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
 
         result.put("matchSearchDtl",rResult);
         result.put("winLoseing",winLoseing());
-        result.put("top3",top3());
+        result.put("top3",top3(matchNum));
 
         return result;
     }
@@ -370,7 +368,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
      *             }
      */
     @Override
-    public Map top3() {
+    public Map top3(int matchNum) {
         log.info("top3 BC 서비스 실행!");
         //전체 매치 정보
         List<MatchDto> matchDtoList = matchSearch();
@@ -380,43 +378,37 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         List<Top3Dto> damegeList;
 
         Map bizOutput;
-        Map result = new HashMap();
         Top3Dto top3Dto;
 
-        //총 MatchCnt 만큼 반복
-        for(int i=0;i<ApiCommon.MatchCnt;i++){
-            //1게임마다 초기화
-            damegeList = new ArrayList<Top3Dto>();
-            bizOutput = new HashMap();
 
-            //매치(참여자) 정보
-            participants = matchDtoList.get(i).getInfo().getParticipants();
+        //1게임마다 초기화
+        damegeList = new ArrayList<Top3Dto>();
+        bizOutput = new HashMap();
 
-            //1게임에 10명 참여
-            for(int j=0;j<10;j++){
-                top3Dto = new Top3Dto();
-                top3Dto.setDamege(participants.get(j).getTotalDamageDealtToChampions());
-                top3Dto.setSummonerName(participants.get(j).getSummonerName());
-                damegeList.add(top3Dto);
+        //매치(참여자들) 정보
+        participants = matchDtoList.get(matchNum).getInfo().getParticipants();
 
-            }
-
-            //데미지 기준으로 오름차순 정렬
-            damegeList.sort(Comparator.comparing((Top3Dto top3DtoSort) -> (Integer) top3DtoSort.getDamege()));
-
-            //1위
-            MapdataUtil.setInt(bizOutput,"Damege1st",damegeList.get(9).getDamege());
-            MapdataUtil.setString(bizOutput,"summoner1stDamege",damegeList.get(9).getSummonerName());
-            //2위
-            MapdataUtil.setInt(bizOutput,"Damege2nd",damegeList.get(8).getDamege());
-            MapdataUtil.setString(bizOutput,"summoner2ndDamege",damegeList.get(8).getSummonerName());
-            //3위
-            MapdataUtil.setInt(bizOutput,"Damege3rd",damegeList.get(7).getDamege());
-            MapdataUtil.setString(bizOutput,"summoner3rdDamege",damegeList.get(7).getSummonerName());
-
-            MapdataUtil.setMap(result,"matchDamegeTOP3::"+i,bizOutput);
+        //1게임에 10명 참여
+        for(int j=0;j<10;j++){
+            top3Dto = new Top3Dto();
+            top3Dto.setDamege(participants.get(j).getTotalDamageDealtToChampions());
+            top3Dto.setSummonerName(participants.get(j).getSummonerName());
+            damegeList.add(top3Dto);
 
         }
-        return result;
+
+        //데미지 기준으로 오름차순 정렬
+        damegeList.sort(Comparator.comparing((Top3Dto top3DtoSort) -> (Integer) top3DtoSort.getDamege()));
+        //1위
+        MapdataUtil.setInt(bizOutput,"Damege1st",damegeList.get(9).getDamege());
+        MapdataUtil.setString(bizOutput,"summoner1stDamege",damegeList.get(9).getSummonerName());
+        //2위
+        MapdataUtil.setInt(bizOutput,"Damege2nd",damegeList.get(8).getDamege());
+        MapdataUtil.setString(bizOutput,"summoner2ndDamege",damegeList.get(8).getSummonerName());
+        //3위
+        MapdataUtil.setInt(bizOutput,"Damege3rd",damegeList.get(7).getDamege());
+        MapdataUtil.setString(bizOutput,"summoner3rdDamege",damegeList.get(7).getSummonerName());
+
+        return bizOutput;
     }
 }
