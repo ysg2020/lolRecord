@@ -1,5 +1,6 @@
 package hello.lolRecord.lr.sr.controller;
 
+import hello.lolRecord.lr.sr.dto.SearchParam;
 import hello.lolRecord.lr.sr.service.RecordSearchSCService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -73,5 +74,12 @@ public class LoLRecordController {
         return mv;
     }
 
+    @ResponseBody
+    @GetMapping(value = "/summonerMatchSearchV3")
+    public ModelAndView summonerMatchSearchV3(@ModelAttribute SearchParam searchParam, ModelAndView mv){
+        log.info("summonerMatchSearchV3 실행!");
+        mv.addObject("result",recordSearchSCService.summonerMatchSearch(searchParam));
+        return mv;
+    }
 
 }

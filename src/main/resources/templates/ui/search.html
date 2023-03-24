@@ -145,7 +145,8 @@
 <script>
 function search() {
     var nickname = $("#name").val();
-    location.href='/LOLRecord/search/summonerMatchSearchV2/'+nickname;
+    <!--location.href='/LOLRecord/search/summonerMatchSearchV2/'+nickname;-->
+    location.href='/LOLRecord/search/summonerMatchSearchV3?nickName='+nickname;
 }
 function searchDtl() {
     $("#match tr").click(function(){
@@ -154,7 +155,8 @@ function searchDtl() {
         var tr = $(this);
         var td = tr.children();
         var no = parseInt(td.eq(0).text());
-        var url ='/LOLRecord/search/summonerMatchSearchV2dtl/'+nickname+'/'+no;
+        <!--var url ='/LOLRecord/search/summonerMatchSearchV2dtl/'+nickname+'/'+no;-->
+        var url ='/LOLRecord/search/summonerMatchSearchV3?nickName='+nickname+'&matchNum='+no;
         location.href=url;
 
     });
