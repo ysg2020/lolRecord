@@ -17,6 +17,7 @@ public interface RecordSearchBCService {
     public List leagueSearch();
     public List matchSearch();
     public List matchSearchChamp(String nickname ,String championName);
+    public Map matchSearchChampDtl(String nickname,String championName,int matchNum);
     public Map winLoseing();
     public Map top3(int matchNum);
     public List myMatchSearch(String nickname);

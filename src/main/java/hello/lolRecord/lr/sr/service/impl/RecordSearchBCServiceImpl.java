@@ -111,11 +111,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         //리그정보,매치정보 각각 담아주기
         result.put("summonerSearch",leagueEntryDTO);
         result.put("myMatchSearch",mymatchSearchChamp(nickname,championName));
-
-        MatchDto matchDto = (MatchDto) matchSearchChamp(nickname, championName).get(matchNum);
-        rResult.put("matchDtoDtl",matchDto);
-
-        result.put("matchSearchDtl",rResult);
+        result.put("matchSearchDtl",matchSearchChampDtl(nickname,championName,matchNum));
         result.put("winLoseing",winLoseing());
         result.put("top3",top3(matchNum));
 
@@ -124,7 +120,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
     /**
      * 내부 함수
      * matchSearch()
-     * matchNum번쨰 매치 정보를 가져온다
+     * match Num번쨰 매치 정보를 가져온다
      * @return List : 매치정보
      */
     @Override
@@ -138,7 +134,22 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         return result;
     }
 
-
+    /**
+     * 내부 함수
+     * matchSearch()
+     * matchChamp Num번쨰 매치 정보를 가져온다
+     * @return List : 매치정보
+     */
+    @Override
+    public Map matchSearchChampDtl(String nickname,String championName,int matchNum) {
+        log.info("matchSearchChampDtl BC 서비스 실행!");
+        //List matchId = getMatchId();
+        Map result = new HashMap();
+        //MatchDto matchDtoDtl = restTemplate.getForObject(ApiCommon.MatchInfoUrl + matchIdList.get(matchNum) + ApiCommon.ApiKey, MatchDto.class);
+        MatchDto matchDto = (MatchDto) matchSearchChamp(nickname, championName).get(matchNum);
+        result.put("matchDtoDtl",matchDto);
+        return result;
+    }
 
     /**
      * 내부 함수
