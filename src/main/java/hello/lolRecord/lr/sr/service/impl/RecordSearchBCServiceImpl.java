@@ -27,32 +27,6 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
     private Map winLoseing = null;
 
     @Override
-    public Map summonerMatchSearch(SearchParam searchParam) {
-        Map result;
-        //닉네임 + 매치넘버 + 챔피언이름
-        if (searchParam.getMatchNum() != null && searchParam.getChampionName() != null){
-            log.info("닉네임 + 매치넘버 + 챔피언이름");
-            result = summonerMatchSearchDtl(searchParam.getNickName(), searchParam.getChampionName(), searchParam.getMatchNum());
-        }
-        //닉네임 + 매치넘버
-        else if(searchParam.getMatchNum() != null){
-            log.info("닉네임 + 매치넘버");
-            result = summonerMatchSearchDtl(searchParam.getNickName(),searchParam.getMatchNum());
-        }
-        //닉네임 + 챔피언이름
-        else if(searchParam.getChampionName() != null){
-            log.info("닉네임 + 챔피언이름");
-            result = summonerMatchSearch(searchParam.getNickName(),searchParam.getChampionName());
-        }
-        //닉네임
-        else{
-            log.info("닉네임");
-            result = summonerMatchSearch(searchParam.getNickName());
-        }
-        return result;
-    }
-
-    @Override
     public Map summonerMatchSearch(String nickname) {
         log.info("summonerMatchSearch BC 서비스 실행!");
         log.info("해당 닉네임 최초 전적 조회!");

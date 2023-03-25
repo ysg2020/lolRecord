@@ -52,8 +52,26 @@ public class RecordSearchSCServiceImpl implements RecordSearchSCService {
     public Map summonerMatchSearch(SearchParam searchParam){
         log.info("summonerMatchSearch BC 서비스 실행!");
         Map result = new HashMap();
-        result.put("result",recordSearchBCService.summonerMatchSearch(searchParam));
+        //닉네임 + 매치넘버 + 챔피언이름
+        if (searchParam.getMatchNum() != null && searchParam.getChampionName() != null){
+            log.info("닉네임 + 매치넘버 + 챔피언이름");
+            result.put("result",recordSearchBCService.summonerMatchSearchDtl(searchParam.getNickName(), searchParam.getChampionName(), searchParam.getMatchNum()));
+        }
+        //닉네임 + 매치넘버
+        else if(searchParam.getMatchNum() != null){
+            log.info("닉네임 + 매치넘버");
+            result.put("result",recordSearchBCService.summonerMatchSearchDtl(searchParam.getNickName(),searchParam.getMatchNum()));
+        }
+        //닉네임 + 챔피언이름
+        else if(searchParam.getChampionName() != null){
+            log.info("닉네임 + 챔피언이름");
+            result.put("result",recordSearchBCService.summonerMatchSearch(searchParam.getNickName(),searchParam.getChampionName()));
+        }
+        //닉네임
+        else{
+            log.info("닉네임");
+            result.put("result",recordSearchBCService.summonerMatchSearch(searchParam.getNickName()));
+        }
         return result;
-
     }
 }
