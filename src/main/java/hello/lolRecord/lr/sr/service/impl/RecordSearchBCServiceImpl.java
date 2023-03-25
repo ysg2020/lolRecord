@@ -24,6 +24,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
     private List<LeagueEntryDTO> leagueEntryDTO = new ArrayList<>();
     private List<String> matchIdList = new ArrayList<>();
     private List<MatchDto> matchDtoList = new ArrayList<>();
+    private Map winLoseing = null;
 
     @Override
     public Map summonerMatchSearch(SearchParam searchParam) {
@@ -61,12 +62,12 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         summonerSearch(nickname);
         getMatchId();
         matchSearch();
-
+        winLoseing = winLoseing();
         //리그정보,매치정보 각각 담아주기
         result.put("summonerSearch",leagueSearch());
         result.put("matchSearchDtl",null);
         result.put("myMatchSearch",myMatchSearch(nickname));
-        result.put("winLoseing",winLoseing());
+        result.put("winLoseing",winLoseing);
 
         return result;
     }
@@ -80,12 +81,12 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         summonerSearch(nickname);
         getMatchId();
         matchSearch();
-
+        winLoseing = winLoseing();
         //리그정보,매치정보 각각 담아주기
         result.put("summonerSearch",leagueSearch());
         result.put("matchSearchDtl",null);
         result.put("myMatchSearch",mymatchSearchChamp(nickname,championName));
-        result.put("winLoseing",winLoseing());
+        result.put("winLoseing",winLoseing);
 
         return result;
     }
@@ -98,7 +99,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         result.put("summonerSearch",leagueEntryDTO);
         result.put("myMatchSearch",myMatchSearch(nickname));
         result.put("matchSearchDtl",matchSearchDtl(nickname,matchNum));
-        result.put("winLoseing",winLoseing());
+        result.put("winLoseing",winLoseing);
         result.put("top3",top3(matchNum));
 
         return result;
@@ -112,7 +113,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         result.put("summonerSearch",leagueEntryDTO);
         result.put("myMatchSearch",mymatchSearchChamp(nickname,championName));
         result.put("matchSearchDtl",matchSearchChampDtl(nickname,championName,matchNum));
-        result.put("winLoseing",winLoseing());
+        result.put("winLoseing",winLoseing);
         result.put("top3",top3(matchNum));
 
         return result;
