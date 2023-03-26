@@ -23,4 +23,5 @@ public interface RecordSearchBCService {
     public List myMatchSearch(String nickname);
     public List mymatchSearchChamp(String nickname,String championName);
     public Map matchSearchDtl(String nickname,int matchNum);
+    public List playChamp();
 }

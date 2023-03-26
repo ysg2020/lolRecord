@@ -24,7 +24,9 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
     private List<LeagueEntryDTO> leagueEntryDTO = new ArrayList<>();
     private List<String> matchIdList = new ArrayList<>();
     private List<MatchDto> matchDtoList = new ArrayList<>();
+    private List<ParticipantDto> myMatchDtoList = new ArrayList<>();
     private Map winLoseing = null;
+    private List playChampList = new ArrayList<>();
 
     @Override
     public Map summonerMatchSearch(String nickname) {
@@ -36,31 +38,33 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         summonerSearch(nickname);
         getMatchId();
         matchSearch();
+        
+        //최초 조회후 전역변수에 저장
         winLoseing = winLoseing();
+        myMatchDtoList = myMatchSearch(nickname);
+        playChampList = playChamp();
+        
         //리그정보,매치정보 각각 담아주기
         result.put("summonerSearch",leagueSearch());
         result.put("matchSearchDtl",null);
-        result.put("myMatchSearch",myMatchSearch(nickname));
+        result.put("myMatchSearch",myMatchDtoList);
         result.put("winLoseing",winLoseing);
-
+        result.put("playChamp",playChampList);
+        result.put("championName",null);
         return result;
     }
     @Override
     public Map summonerMatchSearch(String nickname , String championName) {
         log.info("summonerMatchSearch(championName)  BC 서비스 실행!");
-        log.info("해당 닉네임 + 챔피언이름 최초 전적 조회!");
         Map result = new HashMap();
-
-        //최초 조회시 필수 실행 메소드
-        summonerSearch(nickname);
-        getMatchId();
-        matchSearch();
-        winLoseing = winLoseing();
+        
         //리그정보,매치정보 각각 담아주기
-        result.put("summonerSearch",leagueSearch());
+        result.put("summonerSearch",leagueEntryDTO);
         result.put("matchSearchDtl",null);
         result.put("myMatchSearch",mymatchSearchChamp(nickname,championName));
         result.put("winLoseing",winLoseing);
+        result.put("playChamp",playChampList);
+        result.put("championName",championName);
 
         return result;
     }
@@ -71,10 +75,12 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
 
         //리그정보,매치정보 각각 담아주기
         result.put("summonerSearch",leagueEntryDTO);
-        result.put("myMatchSearch",myMatchSearch(nickname));
+        result.put("myMatchSearch",myMatchDtoList);
         result.put("matchSearchDtl",matchSearchDtl(nickname,matchNum));
         result.put("winLoseing",winLoseing);
         result.put("top3",top3(matchNum));
+        result.put("playChamp",playChampList);
+        result.put("championName",null);
 
         return result;
     }
@@ -89,6 +95,8 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         result.put("matchSearchDtl",matchSearchChampDtl(nickname,championName,matchNum));
         result.put("winLoseing",winLoseing);
         result.put("top3",top3(matchNum));
+        result.put("playChamp",playChamp());
+        result.put("championName",championName);
 
         return result;
     }
@@ -430,5 +438,22 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         MapdataUtil.setString(bizOutput,"summoner3rdDamege",damegeList.get(7).getSummonerName());
 
         return bizOutput;
+    }
+
+    /**
+     * 내부 함수
+     * playChamp()
+     * 검색한 참여자가 플레이한 챔피언 목록을 가져온다.
+     * @return List : 플레이한 챔피언리스트
+     */
+    @Override
+    public List playChamp() {
+        LinkedHashSet playChamp = new LinkedHashSet();
+        playChamp.add("-전체-");
+        for(int i=0;i<ApiCommon.MatchCnt;i++){
+            playChamp.add(myMatchDtoList.get(i).getChampionName());
+        }
+        List listPlayChamp = List.of(playChamp.toArray());
+        return listPlayChamp;
     }
 }

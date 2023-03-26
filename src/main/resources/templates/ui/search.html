@@ -8,6 +8,7 @@
 <body>
 <input type="text" id="name">
 <input type="button" onclick="search()" id="matchRequest" value="소환사 전적 조회">
+
 <!--<table border ="1">
     <tr>
         <td>게임 이름</td>
@@ -37,6 +38,14 @@
     <span th:text ="${result.result.winLoseing.winLose}">연승 연패 여부</span>
     <label>중입니다!!</label>
 </div>
+
+<label>최근 플레이한 챔피언 목록 : </label>
+<select id="selPlayChampList" onchange="selPlayChamp()">
+    <option th:each="playChamp : ${result.result.playChamp}"
+            th:text="${playChamp}" th:selected="${result.result.championName}==${playChamp}"></option>
+</select>
+
+
 <table id="match" border ="1">
     <tr>
         <td>index</td>
@@ -143,6 +152,7 @@
 </body>
 </html>
 <script>
+
 function search() {
     var nickname = $("#name").val();
     <!--location.href='/LOLRecord/search/summonerMatchSearchV2/'+nickname;-->
@@ -152,13 +162,30 @@ function searchDtl() {
     $("#match tr").click(function(){
         var nickname = $("#summonerName").text();
         console.log("nickname",nickname);
+        var championName = $("#selPlayChampList").val();
         var tr = $(this);
         var td = tr.children();
         var no = parseInt(td.eq(0).text());
         <!--var url ='/LOLRecord/search/summonerMatchSearchV2dtl/'+nickname+'/'+no;-->
-        var url ='/LOLRecord/search/summonerMatchSearchV3?nickName='+nickname+'&matchNum='+no;
+        if(championName != "-전체-"){
+            var url ='/LOLRecord/search/summonerMatchSearchV3?nickName='+nickname+'&championName='+championName+'&matchNum='+no;
+        }else{
+            var url ='/LOLRecord/search/summonerMatchSearchV3?nickName='+nickname+'&matchNum='+no;
+        }
+
         location.href=url;
+
 
     });
 }
+function selPlayChamp() {
+    var nickname = $("#summonerName").text();
+    var championName = $("#selPlayChampList").val();
+    if(championName != "-전체-"){
+        location.href='/LOLRecord/search/summonerMatchSearchV3?nickName='+nickname+'&championName='+championName;
+    }else {
+        location.href='/LOLRecord/search/summonerMatchSearchV3?nickName='+nickname;
+    }
+}
+
 </script>
