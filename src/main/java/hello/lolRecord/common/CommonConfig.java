@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
+//자동 빈등록
 @Component
 public class CommonConfig implements HandlerMethodArgumentResolver {
     private final Logger log = LoggerFactory.getLogger(getClass());
