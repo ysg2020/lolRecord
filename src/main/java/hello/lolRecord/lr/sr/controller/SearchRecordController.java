@@ -14,7 +14,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/LOLRecord/search")
 @RequiredArgsConstructor
-public class LoLRecordController {
+public class SearchRecordController {
 
 
     private final Logger log = LoggerFactory.getLogger(getClass());
