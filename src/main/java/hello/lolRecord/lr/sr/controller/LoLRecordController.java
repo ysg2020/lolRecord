@@ -27,8 +27,8 @@ public class LoLRecordController {
     }
     @GetMapping
     public String main(){
-        log.info("메인");
-        return "ui/main";
+        log.info("SR 메인");
+        return "ui/sr/srMain";
     }
     @ResponseBody
     @GetMapping("/summonerMatchSearch")

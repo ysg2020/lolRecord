@@ -30,7 +30,7 @@ public class CommonConfig implements HandlerMethodArgumentResolver {
         log.info("requestURI : {}",requestURI);
         if(requestURI.contains("/LOLRecord/search")){
             log.info("setViewName : /LOLRecord/search");
-            mv.setViewName("ui/search");
+            mv.setViewName("ui/sr/SRsearch");
         } else if (requestURI.contains("/LOLRecord/reports")) {
             log.info("setViewName : /LOLRecord/reports");
             mv.setViewName("ui/reports");
