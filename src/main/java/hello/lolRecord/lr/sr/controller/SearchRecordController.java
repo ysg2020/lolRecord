@@ -28,7 +28,7 @@ public class SearchRecordController {
     @GetMapping
     public String main(){
         log.info("SR 메인");
-        return "ui/sr/srMain";
+        return "ui/sr/SRmain";
     }
     @ResponseBody
     @GetMapping("/summonerMatchSearch")

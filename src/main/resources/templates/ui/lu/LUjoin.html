@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Main page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/assets/css/main.css" />
+
+    <!-- Scripts -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery.scrollex.min.js"></script>
+    <script src="/assets/js/jquery.scrolly.min.js"></script>
+    <script src="/assets/js/browser.min.js"></script>
+    <script src="/assets/js/breakpoints.min.js"></script>
+    <script src="/assets/js/util.js"></script>
+    <script src="/assets/js/main.js"></script>
+</head>
+<body class="is-preload">
+        <div id="main">
+            <div>
+                <label>Join</label>
+            </div>
+            <form action="/LOLRecord/lolUser/join" th:object="${LOLUserJoinForm}" method="post">
+                <div class="row gtr-uniform">
+                    <div class="col-6 col-12-xsmall">
+                        <input type="text"  id="USER_ID" th:field="*{USER_ID}" placeholder="아이디를 입력해주세요." />
+                        <input type="text"  id="PWD" th:field="*{PWD}" placeholder="비밀번호를 입력해주세요." />
+                        <input type="text"  id="BIRTH" th:field="*{BIRTH}" placeholder="생일을 입력해주세요." />
+                        <input type="text"  id="PHONE" th:field="*{PHONE}" placeholder="핸드폰번호를 입력해주세요." />
+                        <input type="text"  id="ADDRESS" th:field="*{ADDRESS}" placeholder="주소를 입력해주세요." />
+                        <input type="text"  id="GENDER" th:field="*{GENDER}" placeholder="성별을 입력해주세요." />
+                        <input type="text"  id="LOL_NICK" th:field="*{LOL_NICK}" placeholder="롤 닉네임을 입력해주세요." />
+                        <input type="text"  id="MAIN_POSITION" th:field="*{MAIN_POSITION}" placeholder="주포지션을 입력해주세요." />
+                        <input type="text"  id="SUB_POSITION" th:field="*{SUB_POSITION}" placeholder="부포지션을 입력해주세요." />
+                        <input class="button primary" type="submit" value="회원가입">
+                    </div>
+                </div>
+            </form>
+        </div>
+</body>
+</html>
+<script>
+
+</script>

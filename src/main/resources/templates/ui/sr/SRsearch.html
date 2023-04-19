@@ -4,10 +4,31 @@
     <meta charset="UTF-8">
     <title>Search Page</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/assets/css/main.css" />
+
+    <!-- Scripts -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery.scrollex.min.js"></script>
+    <script src="/assets/js/jquery.scrolly.min.js"></script>
+    <script src="/assets/js/browser.min.js"></script>
+    <script src="/assets/js/breakpoints.min.js"></script>
+    <script src="/assets/js/util.js"></script>
+    <script src="/assets/js/main.js"></script>
+
 </head>
-<body>
-<input type="text" id="name">
-<input type="button" onclick="search()" id="matchRequest" value="소환사 전적 조회">
+<body class="is-preload">
+<div id="main">
+<!--<input type="text" id="name">
+<input type="button" onclick="search()" id="matchRequest" value="소환사 전적 조회">-->
+    <div class="row gtr-uniform">
+        <div class="col-6 col-12-xsmall">
+            <input type="text"  id="name" value="" placeholder="닉네임을 입력해주세요." />
+        </div>
+        <div class="col-6 col-12-xsmall">
+            <input class="button primary" type="button" onclick="search()" id="matchRequest" value="소환사 전적 조회">
+        </div>
+    </div>
 
 <!--<table border ="1">
     <tr>
@@ -19,115 +40,125 @@
         <td th:text ="${Result.info.gameStartTimestamp}">게임스탬프</td>
     </tr>
 </table>-->
-<div id ="summonerName" th:text ="${result.result.summonerSearch[0].summonerName}">소환사 닉네임</div>
+<!--<div id ="summonerName" th:text ="${result.result.summonerSearch[0].summonerName}">소환사 닉네임</div>-->
 <div>
-    <span th:text ="${result.result.summonerSearch[0].tier}">소환사 티어</span>
-    <span th:text ="${result.result.summonerSearch[0].rank}">소환사 랭크</span>
-    <span th:text ="${result.result.summonerSearch[0].leaguePoints}">소환사 리그점수</span>
-    <label>점</label>
+    <span id ="summonerName" th:text ="${result.result.summonerSearch[0].summonerName}">소환사 닉네임</span>
+    <span>의 전적 정보</span>
+</div>
+<div class="col-6 col-12-xsmall">
+    <div>
+        <span th:text ="${result.result.summonerSearch[0].tier}">소환사 티어</span>
+        <span th:text ="${result.result.summonerSearch[0].rank}">소환사 랭크</span>
+        <span th:text ="${result.result.summonerSearch[0].leaguePoints}">소환사 리그점수</span>
+        <span>점</span>
+    </div>
+    <div>
+        <span th:text ="${result.result.summonerSearch[0].wins}">소환사 승리횟수</span>
+        <span>승</span>
+        <span th:text ="${result.result.summonerSearch[0].losses}">소환사 패배횟수</span>
+        <span>패</span>
+    </div>
+    <div>
+        <span>현재 </span>
+        <span th:text ="${result.result.winLoseing.winLoseingCnt}">횟수</span>
+        <span th:text ="${result.result.winLoseing.winLose}">연승 연패 여부</span>
+        <span>중입니다.</span>
+    </div>
 </div>
 <div>
-    <span th:text ="${result.result.summonerSearch[0].wins}">소환사 승리횟수</span>
-    <label>승</label>
-    <span th:text ="${result.result.summonerSearch[0].losses}">소환사 패배횟수</span>
-    <label>패</label>
+    <label>최근 플레이한 챔피언 목록 : </label>
+    <select class="col-12" id="selPlayChampList" onchange="selPlayChamp()">
+        <option th:each="playChamp : ${result.result.playChamp}"
+                th:text="${playChamp}" th:selected="${result.result.championName}==${playChamp}"></option>
+    </select>
 </div>
-<div>
-    <label>현재 </label>
-    <span th:text ="${result.result.winLoseing.winLoseingCnt}">횟수</span>
-    <span th:text ="${result.result.winLoseing.winLose}">연승 연패 여부</span>
-    <label>중입니다!!</label>
-</div>
-
-<label>최근 플레이한 챔피언 목록 : </label>
-<select id="selPlayChampList" onchange="selPlayChamp()">
-    <option th:each="playChamp : ${result.result.playChamp}"
-            th:text="${playChamp}" th:selected="${result.result.championName}==${playChamp}"></option>
-</select>
-
-
-<table id="match" border ="1">
-    <tr>
-        <td>index</td>
-        <td>win</td>
-        <td>champion</td>
-        <td>kills</td>
-        <td>deaths</td>
-        <td>assists</td>
-        <td>+</td>
-    </tr>
-    <block th:each ="Result,ResultStat : ${result.result.myMatchSearch}">
-        <block th:if="${Result.win}">
-            <tr bgcolor="#D4E4FE">
-                <td th:text="${ResultStat.index}"></td> <!--현재 index  -->
-                <td>승</td>
-                <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/}+${Result.championName}+@{.png}"></td>
-                <td th:text ="${Result.kills}"></td>
-                <td th:text ="${Result.deaths}"></td>
-                <td th:text ="${Result.assists}"></td>
-                <td onclick="searchDtl()">+</td>
-            </tr>
+<div class="table-wrapper">
+    <table id="match" border ="1">
+        <tr>
+            <td>index</td>
+            <td>win</td>
+            <td>champion</td>
+            <td>kills</td>
+            <td>deaths</td>
+            <td>assists</td>
+            <td>+</td>
+        </tr>
+        <block th:each ="Result,ResultStat : ${result.result.myMatchSearch}">
+            <block th:if="${Result.win}">
+                <tr bgcolor="#D4E4FE">
+                    <td th:text="${ResultStat.index}"></td> <!--현재 index  -->
+                    <td>승</td>
+                    <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/}+${Result.championName}+@{.png}"></td>
+                    <td th:text ="${Result.kills}"></td>
+                    <td th:text ="${Result.deaths}"></td>
+                    <td th:text ="${Result.assists}"></td>
+                    <td onclick="searchDtl()">+</td>
+                </tr>
+            </block>
+            <block th:unless="${Result.win}">
+                <tr bgcolor="#FFEEEE">
+                    <td th:text="${ResultStat.index}"></td> <!--현재 index  -->
+                    <td>패</td>
+                    <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/}+${Result.championName}+@{.png}"></td>
+                    <td th:text ="${Result.kills}"></td>
+                    <td th:text ="${Result.deaths}"></td>
+                    <td th:text ="${Result.assists}"></td>
+                    <td onclick="searchDtl()">+</td>
+                </tr>
+            </block>
         </block>
-        <block th:unless="${Result.win}">
-            <tr bgcolor="#FFEEEE">
-                <td th:text="${ResultStat.index}"></td> <!--현재 index  -->
-                <td>패</td>
-                <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/}+${Result.championName}+@{.png}"></td>
-                <td th:text ="${Result.kills}"></td>
-                <td th:text ="${Result.deaths}"></td>
-                <td th:text ="${Result.assists}"></td>
-                <td onclick="searchDtl()">+</td>
-            </tr>
-        </block>
-    </block>
-</table>
-
+    </table>
+</div>
 <!--초기화면 (특정 매치를 선택하기 전에는 표시하지 않음)-->
 <block th:if ="${result.result.matchSearchDtl != null}">
-    <div>
-        <label>데미지 1위 : </label>
-        <span th:text="${result.result.top3.Damege1st}">데미지 1위 닉네임</span>
-        <span th:text="${result.result.top3.summoner1stDamege}">1위 데미지량</span>
+    <div class="col-6 col-12-xsmall">
+        <div>
+            <span>데미지 1위 : </span>
+            <span th:text="${result.result.top3.Damege1st}">데미지 1위 닉네임</span>
+            <span th:text="${result.result.top3.summoner1stDamege}">1위 데미지량</span>
+        </div>
+        <div>
+            <span>데미지 2위: </span>
+            <span th:text="${result.result.top3.Damege2nd}">데미지 2위 닉네임</span>
+            <span th:text="${result.result.top3.summoner2ndDamege}">2위 데미지량</span>
+        </div>
+        <div>
+            <span>데미지 3위 : </span>
+            <span th:text="${result.result.top3.Damege3rd}">데미지 3위 닉네임</span>
+            <span th:text="${result.result.top3.summoner3rdDamege}">3위 데미지량</span>
+        </div>
     </div>
-    <div>
-        <label>데미지 2위: </label>
-        <span th:text="${result.result.top3.Damege2nd}">데미지 2위 닉네임</span>
-        <span th:text="${result.result.top3.summoner2ndDamege}">2위 데미지량</span>
-    </div>
-    <div>
-        <label>데미지 3위 : </label>
-        <span th:text="${result.result.top3.Damege3rd}">데미지 3위 닉네임</span>
-        <span th:text="${result.result.top3.summoner3rdDamege}">3위 데미지량</span>
-    </div>
-<table border ="1">
-    <tr>
-        <td>summonerName</td>
-        <td>championName</td>
-        <td>kills</td>
-        <td>deaths</td>
-        <td>assists</td>
-        <td>damage</td>
-        <td>takenDamage</td>
-        <td>gold</td>
-        <td>cs</td>
-    </tr>
-
-    <block th:each ="Result : ${result.result.matchSearchDtl.matchDtoDtl.info.participants}">
+    <div class="table-wrapper">
+        <table border ="1">
             <tr>
-                <td th:text ="${Result.summonerName}"></td>
-                <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/}+${Result.championName}+@{.png}"></td>
-                <td th:text ="${Result.kills}"></td>
-                <td th:text ="${Result.deaths}"></td>
-                <td th:text ="${Result.assists}"></td>
-                <td th:text ="${Result.totalDamageDealtToChampions}"></td>
-                <td th:text ="${Result.totalDamageTaken}"></td>
-                <td th:text ="${Result.goldEarned}"></td>
-                <td th:text ="${Result.totalMinionsKilled}+${Result.neutralMinionsKilled}"></td>
+                <td>summonerName</td>
+                <td>championName</td>
+                <td>kills</td>
+                <td>deaths</td>
+                <td>assists</td>
+                <td>damage</td>
+                <td>takenDamage</td>
+                <td>gold</td>
+                <td>cs</td>
             </tr>
-    </block>
-</table>
-</block>
 
+            <block th:each ="Result : ${result.result.matchSearchDtl.matchDtoDtl.info.participants}">
+                    <tr>
+                        <td th:text ="${Result.summonerName}"></td>
+                        <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/}+${Result.championName}+@{.png}"></td>
+                        <td th:text ="${Result.kills}"></td>
+                        <td th:text ="${Result.deaths}"></td>
+                        <td th:text ="${Result.assists}"></td>
+                        <td th:text ="${Result.totalDamageDealtToChampions}"></td>
+                        <td th:text ="${Result.totalDamageTaken}"></td>
+                        <td th:text ="${Result.goldEarned}"></td>
+                        <td th:text ="${Result.totalMinionsKilled}+${Result.neutralMinionsKilled}"></td>
+                    </tr>
+            </block>
+        </table>
+    </div>
+</block>
+</div>
 <!--모든 참여자 매치 정보-->
 <!--<table border ="1">
     <tr>
