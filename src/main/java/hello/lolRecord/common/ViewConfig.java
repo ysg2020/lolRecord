@@ -27,6 +27,7 @@ public class ViewConfig implements HandlerMethodArgumentResolver {
         HttpServletRequest nativeRequest = (HttpServletRequest) webRequest.getNativeRequest();
         String requestURI = nativeRequest.getRequestURI();
         log.info("requestURI : {}",requestURI);
+        //mv.setViewName("jsonView");
         if(requestURI.contains("/LOLRecord/search")){
             log.info("setViewName : /LOLRecord/search");
             mv.setViewName("ui/sr/SRsearch");

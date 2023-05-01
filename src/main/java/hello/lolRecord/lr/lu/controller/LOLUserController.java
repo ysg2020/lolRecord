@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,6 +20,19 @@ public class LOLUserController {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final LOLUserService lolUserService;
+    @GetMapping(value = "/test")
+    public String test(){
+        log.info("LU 테스트!");
+        return "ui/test";
+    }
+
+    @GetMapping(value = "/testing")
+    public ModelAndView testing(ModelAndView mv){
+        log.info("LU 테스트ing");
+        mv.addObject("result","테스트!!");
+        return mv;
+    }
+
     @GetMapping
     public String main(){
         log.info("LU 메인");

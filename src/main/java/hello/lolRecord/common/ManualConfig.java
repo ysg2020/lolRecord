@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.sql.DataSource;
 
@@ -33,4 +34,12 @@ public class ManualConfig {
         dataSource.setPoolName("My Pool");
         return new LOLUserRepository(dataSource);
     }
+
+    @Bean
+    public MappingJackson2JsonView jsonView(){
+        log.info("MappingJackson2JsonView 수동 빈등록");
+        MappingJackson2JsonView jsonView = new MappingJackson2JsonView();
+        return jsonView;
+    }
+
 }
