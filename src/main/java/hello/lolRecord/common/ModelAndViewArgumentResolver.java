@@ -14,20 +14,24 @@ import javax.servlet.http.HttpServletRequest;
 
 //자동 빈등록
 @Component
-public class ViewConfig implements HandlerMethodArgumentResolver {
+public class ModelAndViewArgumentResolver implements HandlerMethodArgumentResolver {
     private final Logger log = LoggerFactory.getLogger(getClass());
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return true;
+        log.info("ModelAndView ArgumentResolver supportsParameter 실행!!");
+        log.info("ModelAndView ArgumentResolver 파라미터 타입 = {}", parameter.getParameterType());
+        return ModelAndView.class.isAssignableFrom(parameter.getParameterType());
     }
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        log.info("ModelAndView ArgumentResolver resolveArgument 실행!!");
         ModelAndView mv = new ModelAndView();
         HttpServletRequest nativeRequest = (HttpServletRequest) webRequest.getNativeRequest();
         String requestURI = nativeRequest.getRequestURI();
         log.info("requestURI : {}",requestURI);
-        //mv.setViewName("jsonView");
+        mv.setViewName("jsonView");
         if(requestURI.contains("/LOLRecord/search")){
             log.info("setViewName : /LOLRecord/search");
             mv.setViewName("ui/sr/SRsearch");

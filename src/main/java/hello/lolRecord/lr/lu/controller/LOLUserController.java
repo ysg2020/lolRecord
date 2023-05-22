@@ -1,5 +1,6 @@
 package hello.lolRecord.lr.lu.controller;
 
+import hello.lolRecord.common.Login;
 import hello.lolRecord.lr.lu.dto.LOLUserJoinForm;
 import hello.lolRecord.lr.lu.dto.LOLUserLoginForm;
 import hello.lolRecord.lr.lu.service.LOLUserService;
@@ -8,9 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.sql.SQLException;
 
 @Controller
@@ -26,6 +32,7 @@ public class LOLUserController {
         return "ui/test";
     }
 
+    @ResponseBody
     @GetMapping(value = "/testing")
     public ModelAndView testing(ModelAndView mv){
         log.info("LU 테스트ing");
@@ -34,14 +41,25 @@ public class LOLUserController {
     }
 
     @GetMapping
-    public String main(){
+    public ModelAndView main(@Login String Login ,ModelAndView mv){
         log.info("LU 메인");
-        return "ui/lu/LUmain";
+        log.info("Login : {}",Login);
+        mv.setViewName("ui/lu/LUmain");
+        if(Login != "success"){
+            log.info("세션이 없습니다!!");
+            mv.addObject("login","false");
+            return mv;
+        }
+        log.info("세션이 있습니다!!");
+        mv.addObject("login","true");
+        return mv;
     }
     @GetMapping(value = "/loginForm")
-    public String loginForm(@ModelAttribute LOLUserLoginForm lolUserLoginForm){
-        log.info("LU login");
-        return "ui/lu/LUlogin";
+    public ModelAndView loginForm(@ModelAttribute LOLUserLoginForm lolUserLoginForm, ModelAndView mv){
+        log.info("LU loginForm");
+        mv.setViewName("ui/lu/LUlogin");
+        return mv;
+
     }
     @GetMapping(value = "/joinForm")
     public String joinForm(@ModelAttribute LOLUserJoinForm lolUserJoinForm){
@@ -50,18 +68,41 @@ public class LOLUserController {
     }
     @ResponseBody
     @PostMapping(value = "/login")
-    public ModelAndView login(@ModelAttribute LOLUserLoginForm lolUserLoginForm, ModelAndView mv) throws SQLException {
+    public ModelAndView login(@Valid @ModelAttribute LOLUserLoginForm lolUserLoginForm ,BindingResult bindingResult, ModelAndView mv , HttpServletRequest request) throws SQLException {
         log.info("login 실행!");
         log.info("요청 파라미터 : {}", lolUserLoginForm.getUSER_ID());
+        log.info("ModelAndView getViewName = {}",mv.getViewName());
+        if(bindingResult.hasErrors()){
+            log.info("아이디 , 비밀번호 공백!!");
+            mv.setViewName("ui/lu/LUlogin");
+            return mv;
+        }
+
         String login = lolUserService.login(lolUserLoginForm);
+
         if(login.equals("success")){
-            mv.setViewName("ui/sr/SRmain");
+            log.info("로그인 성공!!");
+            HttpSession session = request.getSession();
+            session.setAttribute("LoginUser" , login);
+            mv.setViewName("redirect:/LOLRecord/lolUser");
         }else {
-            mv.setViewName("ui/lu/LUmain");
+            log.info("로그인 실패!!");
+            bindingResult.reject("LoginFail","로그인 실패!! 아이디와 비밀번호를 확인해주세요!!");
+            mv.setViewName("ui/lu/LUlogin");
+            return mv;
         }
         return mv;
     }
-
+    @GetMapping(value = "/logout")
+    public String logout(HttpServletRequest request) {
+        log.info("로그아웃!!");
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            log.info("세션 비우기!!");
+            session.invalidate();
+        }
+        return "redirect:/LOLRecord/lolUser";
+    }
     @ResponseBody
     @PostMapping(value = "/join")
     public ModelAndView join(@ModelAttribute LOLUserJoinForm lolUserJoinForm, ModelAndView mv) throws SQLException {

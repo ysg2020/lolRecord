@@ -21,10 +21,18 @@
             <div>
                 <label>Home</label>
             </div>
-            <div class="col-6 col-12-xsmall">
-                <input class="button primary" type="button" onclick="joinForm()" value="회원가입">
-                <input class="button primary" type="button" onclick="loginForm()" value="로그인">
-            </div>
+            <block th:if ="${login}">
+                <div class="col-6 col-12-xsmall">
+                    <input class="button primary" type="button" onclick="lolSearchService()" value="롤 전적 검색">
+                    <input class="button primary" type="button" onclick="logout()" value="로그아웃">
+                </div>
+            </block>
+            <block th:unless ="${login}">
+                <div class="col-6 col-12-xsmall">
+                    <input class="button primary" type="button" onclick="joinForm()" value="회원가입">
+                    <input class="button primary" type="button" onclick="loginForm()" value="로그인">
+                </div>
+            </block>
         </div>
 </body>
 </html>
@@ -34,5 +42,11 @@ function loginForm() {
 }
 function joinForm() {
     location.href='/LOLRecord/lolUser/joinForm';
+}
+function lolSearchService() {
+    location.href='/LOLRecord/search';
+}
+function logout() {
+    location.href='/LOLRecord/lolUser/logout';
 }
 </script>

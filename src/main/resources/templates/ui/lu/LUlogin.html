@@ -22,6 +22,15 @@
                 <label>Login</label>
             </div>
             <form action="/LOLRecord/lolUser/login" th:object="${LOLUserLoginForm}" method="post">
+                <div th:errors="*{USER_ID}">
+                    아이디 공백
+                </div>
+                <div th:errors="*{PWD}">
+                    비밀번호 공백
+                </div>
+                <div th:if ="${#fields.hasGlobalErrors()}">
+                    <p th:each ="err : ${#fields.globalErrors()}" th:text =${err}>전체 오류 메시지</p>
+                </div>
                 <div class="col-6 col-12-xsmall">
                     <input type="text"  id="USER_ID" th:field="*{USER_ID}" placeholder="아이디를 입력해주세요." />
                     <input type="text"  id="PWD" th:field="*{PWD}" placeholder="비밀번호를 입력해주세요." />
