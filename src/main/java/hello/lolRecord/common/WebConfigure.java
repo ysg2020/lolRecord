@@ -25,7 +25,8 @@ public class WebConfigure implements WebMvcConfigurer , WebMvcRegistrations {
                 .order(1)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/LOLRecord/lolUser","/LOLRecord/lolUser/loginForm","/LOLRecord/lolUser/joinForm"
-                                        ,"/LOLRecord/lolUser/login","/LOLRecord/lolUser/logout");
+                                        ,"/LOLRecord/lolUser/login","/LOLRecord/lolUser/logout"
+                                        ,"/assets/**","/images/**");
     }
 
     @Override
