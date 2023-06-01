@@ -8,7 +8,7 @@
         WHERE USER_ID = #{user_id}
     </select>
 
-    <insert id="save">
+    <insert id="save" parameterType="LOLUserJoinForm">
         INSERT INTO LOL_USER(
             USER_ID
             ,PWD
