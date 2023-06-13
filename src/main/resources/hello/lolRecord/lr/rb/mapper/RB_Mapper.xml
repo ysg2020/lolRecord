@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hello.lolRecord.lr.rb.mapper.RBMapper">
+
+    <select id="selectOne" parameterType="int" resultType="hello.lolRecord.lr.rb.dto.RBSelectOneDTO">
+        SELECT
+             USER_ID
+            ,TITLE
+            ,CONTENTS
+            ,WRITE_DATE
+            ,RPT_NICK
+            ,VIEW
+            ,GOOD
+        FROM REPORT_BOARD
+        WHERE 1=1
+            AND BOARD_ID = #{BOARD_ID}
+    </select>
+
+    <insert id="insert" parameterType="hello.lolRecord.lr.rb.dto.RBInUpDTO">
+        INSERT INTO REPORT_BOARD(
+            USER_ID
+            ,TITLE
+            ,CONTENTS
+            ,WRITE_DATE
+            ,RPT_NICK
+            ,VIEW
+            ,GOOD)
+        values(
+            #{USER_ID}
+            ,#{TITLE}
+            ,#{CONTENTS}
+            ,now()
+            ,#{RPT_NICK}
+            ,0
+            ,0)
+
+    </insert>
+
+    <select id="selectList" resultType="hello.lolRecord.lr.rb.dto.RBSelectListDTO">
+            SELECT A.*
+                ,row_number() over(order by BOARD_ID) AS ROW_NUM
+                ,count(1) AS TOT_NUM
+            FROM
+                (SELECT
+                    BOARD_ID
+                    ,USER_ID
+                    ,TITLE
+                    ,VIEW
+                    ,GOOD
+                FROM REPORT_BOARD
+                WHERE 1=1
+                ) A
+            WHERE 1=1
+    </select>
+
+    <update id="update" parameterType="hello.lolRecord.lr.rb.dto.RBInUpDTO">
+        UPDATE REPORT_BOARD
+        SET TITLE = #{TITLE}
+            ,CONTENTS = #{CONTENTS}
+            ,RPT_NICK = #{RPT_NICK}
+            ,WRITE_DATE = now()
+        WHERE 1=1
+            AND BOARD_ID = #{BOARD_ID}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM REPORT_BOARD
+        WHERE 1=1
+            AND BOARD_ID = #{BOARD_ID}
+
+    </delete>
+
+    <update id="updateViewCnt" parameterType="int">
+        UPDATE REPORT_BOARD
+        SET VIEW = VIEW + 1
+        WHERE 1=1
+            AND BOARD_ID = #{BOARD_ID}
+
+    </update>
+
+    <update id="updateGoodCnt" parameterType="int">
+        UPDATE REPORT_BOARD
+        SET GOOD = GOOD + 1
+        WHERE 1=1
+            AND BOARD_ID = #{BOARD_ID}
+
+    </update>
+
+
+</mapper>
