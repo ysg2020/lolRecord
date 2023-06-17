@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -142,7 +143,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
      */
 
     @Override
-    public void summonerSearch(String nickname) {
+    public String summonerSearch(String nickname) throws HttpClientErrorException {
         log.info("summonerSearch BC 서비스 실행! (API 요청)");
         SummonerDTO summonerDTO = restTemplate.getForObject(ApiCommon.SummonerUrl + nickname + ApiCommon.ApiKey, SummonerDTO.class);
         SummonerId = summonerDTO.getId();
@@ -153,6 +154,8 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
         log.info("summonerLevel = {}", summonerDTO.getSummonerLevel());
         log.info("summonerAccountId = {}", summonerDTO.getAccountId());
         log.info("summonerName = {}", summonerDTO.getName());
+
+        return summonerName;
     }
     /**
      * 내부 함수

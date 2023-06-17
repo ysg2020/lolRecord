@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface RecordSearchBCService {
 
-    public void summonerSearch(String nickname);
+    public String summonerSearch(String nickname);
     public Map summonerMatchSearch(String nickname);
     public Map summonerMatchSearch(String nickname,String championName);
     public Map summonerMatchSearchDtl(String nickname,int matchNum);

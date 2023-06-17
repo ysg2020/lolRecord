@@ -1,4 +1,4 @@
-package hello.lolRecord.common;
+package hello.lolRecord.common.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

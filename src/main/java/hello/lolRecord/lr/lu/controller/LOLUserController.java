@@ -1,6 +1,6 @@
 package hello.lolRecord.lr.lu.controller;
 
-import hello.lolRecord.common.Login;
+import hello.lolRecord.common.annotation.Login;
 import hello.lolRecord.lr.lu.dto.LOLUserJoinForm;
 import hello.lolRecord.lr.lu.dto.LOLUserLoginForm;
 import hello.lolRecord.lr.lu.service.LOLUserService;
@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -106,10 +104,10 @@ public class LOLUserController {
     @ResponseBody
     @PostMapping(value = "/join")
     public ModelAndView join(@ModelAttribute LOLUserJoinForm lolUserJoinForm, ModelAndView mv) throws SQLException {
-        log.info("login 실행!");
-        log.info("요청 파라미터 : {}", lolUserJoinForm.getUSER_ID());
-        String login = lolUserService.join(lolUserJoinForm);
-        mv.setViewName("ui/lu/LUmain");
+        log.info("LOLUserController : join");
+        String joinResult = lolUserService.join(lolUserJoinForm);
+        mv.setViewName("ui/lu/LUjoin");
+        mv.addObject("joinResult",joinResult);
         return mv;
     }
 }

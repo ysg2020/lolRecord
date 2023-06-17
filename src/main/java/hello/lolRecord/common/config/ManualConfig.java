@@ -1,4 +1,4 @@
-package hello.lolRecord.common;
+package hello.lolRecord.common.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import hello.lolRecord.common.db.ConnectionConst;

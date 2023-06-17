@@ -5,7 +5,7 @@
 
     <select id="findPwd" resultType="String">
         SELECT PWD FROM LOL_USER
-        WHERE USER_ID = #{user_id}
+        WHERE USER_ID = #{USER_ID}
     </select>
 
     <insert id="save" parameterType="LOLUserJoinForm">
@@ -30,4 +30,9 @@
             ,#{MAIN_POSITION}
             ,#{SUB_POSITION})
     </insert>
+
+    <select id="findNick" resultType="String">
+        SELECT LOL_NICK FROM LOL_USER
+        WHERE LOL_NICK = #{LOL_NICK}
+    </select>
 </mapper>

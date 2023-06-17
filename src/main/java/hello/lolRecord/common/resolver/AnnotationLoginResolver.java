@@ -1,6 +1,6 @@
-package hello.lolRecord.common;
+package hello.lolRecord.common.resolver;
 
-import hello.lolRecord.lr.lu.dto.LOLUserLoginForm;
+import hello.lolRecord.common.annotation.Login;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

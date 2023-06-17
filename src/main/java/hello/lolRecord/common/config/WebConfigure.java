@@ -1,5 +1,9 @@
-package hello.lolRecord.common;
+package hello.lolRecord.common.config;
 
+import hello.lolRecord.common.LoginCheckInterceptor;
+import hello.lolRecord.common.resolver.AnnotationLoginResolver;
+import hello.lolRecord.common.resolver.AnnotationParamResolver;
+import hello.lolRecord.common.resolver.ModelAndViewArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +31,8 @@ public class WebConfigure implements WebMvcConfigurer , WebMvcRegistrations {
                 .excludePathPatterns("/LOLRecord/lolUser","/LOLRecord/lolUser/loginForm","/LOLRecord/lolUser/joinForm"
                                         ,"/LOLRecord/lolUser/login","/LOLRecord/lolUser/logout"
                                         ,"/LOLRecord/lolUser/join"
+                                        ,"/error"
+                                        ,"/favicon.ico"
                                         ,"/assets/**","/images/**");
     }
 

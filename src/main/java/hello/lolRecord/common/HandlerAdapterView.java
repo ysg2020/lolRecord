@@ -1,5 +1,6 @@
 package hello.lolRecord.common;
 
+import hello.lolRecord.common.resolver.ModelAndViewArgumentResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.annotation.MapMethodProcessor;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

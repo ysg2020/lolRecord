@@ -1,4 +1,4 @@
-package hello.lolRecord.common;
+package hello.lolRecord.common.resolver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

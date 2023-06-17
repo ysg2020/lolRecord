@@ -8,4 +8,5 @@ import java.sql.SQLException;
 public interface LOLUserService {
     public String login(LOLUserLoginForm lolUser) throws SQLException;
     public String join(LOLUserJoinForm lolUser) throws SQLException;
+    public String summonerNickCheck(String nickname);
 }

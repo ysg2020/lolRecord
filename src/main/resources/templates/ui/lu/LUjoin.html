@@ -31,8 +31,14 @@
                         <input type="text"  id="ADDRESS" th:field="*{ADDRESS}" placeholder="주소를 입력해주세요." />
                         <input type="text"  id="GENDER" th:field="*{GENDER}" placeholder="성별을 입력해주세요." />
                         <input type="text"  id="LOL_NICK" th:field="*{LOL_NICK}" placeholder="롤 닉네임을 입력해주세요." />
+                        <block th:if ="${joinResult == 'fail'}">
+                            <span>롤 닉네임이 존재하지 않거나 이미 등록된 롤 닉네임입니다.</span>
+                        </block>
                         <input type="text"  id="MAIN_POSITION" th:field="*{MAIN_POSITION}" placeholder="주포지션을 입력해주세요." />
                         <input type="text"  id="SUB_POSITION" th:field="*{SUB_POSITION}" placeholder="부포지션을 입력해주세요." />
+                        <block th:if ="${joinResult == 'success'}">
+                            <div>롤 닉네임 체크 완료!  회원 가입 완료했습니다!</div>
+                        </block>
                         <input class="button primary" type="submit" value="회원가입">
                     </div>
                 </div>
