@@ -9,6 +9,7 @@ import hello.lolRecord.lr.lu.service.LOLUserService;
 import hello.lolRecord.lr.sr.service.RecordSearchBCService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -45,7 +46,7 @@ public class LOLUserServiceImpl implements LOLUserService{
                 lolUserMybatisRepository.save(lolUser);
                 return "success";
             }
-        }catch(SQLException e){
+        }catch(DuplicateKeyException | SQLException e){
             log.info("아이디 중복 확인");
             return "fail";
         }
