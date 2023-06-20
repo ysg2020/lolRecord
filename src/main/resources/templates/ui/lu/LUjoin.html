@@ -25,19 +25,28 @@
                 <div class="row gtr-uniform">
                     <div class="col-6 col-12-xsmall">
                         <input type="text"  id="USER_ID" th:field="*{USER_ID}" placeholder="아이디를 입력해주세요." />
+                        <block th:if ="${joinResult != null}">
+                            <block th:if ="${joinResult.join == 'duplicateFail'}">
+                                <span>이미 존재하는 아이디 입니다.</span>
+                            </block>
+                        </block>
                         <input type="text"  id="PWD" th:field="*{PWD}" placeholder="비밀번호를 입력해주세요." />
                         <input type="text"  id="BIRTH" th:field="*{BIRTH}" placeholder="생일을 입력해주세요." />
                         <input type="text"  id="PHONE" th:field="*{PHONE}" placeholder="핸드폰번호를 입력해주세요." />
                         <input type="text"  id="ADDRESS" th:field="*{ADDRESS}" placeholder="주소를 입력해주세요." />
                         <input type="text"  id="GENDER" th:field="*{GENDER}" placeholder="성별을 입력해주세요." />
                         <input type="text"  id="LOL_NICK" th:field="*{LOL_NICK}" placeholder="롤 닉네임을 입력해주세요." />
-                        <block th:if ="${joinResult == 'fail'}">
-                            <span>롤 닉네임이 존재하지 않거나 이미 등록된 롤 닉네임입니다.</span>
+                        <block th:if ="${joinResult != null}">
+                            <block th:if ="${joinResult.join == 'nickCheckFail'}">
+                                <span>롤 닉네임이 존재하지 않거나 이미 등록된 롤 닉네임입니다.</span>
+                            </block>
                         </block>
                         <input type="text"  id="MAIN_POSITION" th:field="*{MAIN_POSITION}" placeholder="주포지션을 입력해주세요." />
                         <input type="text"  id="SUB_POSITION" th:field="*{SUB_POSITION}" placeholder="부포지션을 입력해주세요." />
-                        <block th:if ="${joinResult == 'success'}">
-                            <div>롤 닉네임 체크 완료!  회원 가입 완료했습니다!</div>
+                        <block th:if ="${joinResult != null}">
+                            <block th:if ="${joinResult.join == 'success'}">
+                                <span>롤 닉네임 체크 완료!  회원 가입 완료했습니다!</span>
+                            </block>
                         </block>
                         <input class="button primary" type="submit" value="회원가입">
                     </div>

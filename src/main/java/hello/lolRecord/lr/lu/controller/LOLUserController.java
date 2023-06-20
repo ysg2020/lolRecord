@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.sql.SQLException;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/LOLRecord/lolUser")
@@ -105,7 +106,8 @@ public class LOLUserController {
     @PostMapping(value = "/join")
     public ModelAndView join(@ModelAttribute LOLUserJoinForm lolUserJoinForm, ModelAndView mv) throws SQLException {
         log.info("LOLUserController : join");
-        String joinResult = lolUserService.join(lolUserJoinForm);
+        Map joinResult = lolUserService.join(lolUserJoinForm);
+        log.info("joinResult : {}",joinResult);
         mv.setViewName("ui/lu/LUjoin");
         mv.addObject("joinResult",joinResult);
         return mv;
