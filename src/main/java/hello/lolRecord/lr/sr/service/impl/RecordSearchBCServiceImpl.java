@@ -6,6 +6,7 @@ import hello.lolRecord.lr.sr.service.RecordSearchBCService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -16,6 +17,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class RecordSearchBCServiceImpl implements RecordSearchBCService {
 
+    @Value("${riot-api-key}")
+    private String ApiKey;
     private final RestTemplate restTemplate;
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -145,7 +148,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
     @Override
     public String summonerSearch(String nickname) throws HttpClientErrorException {
         log.info("summonerSearch BC 서비스 실행! (API 요청)");
-        SummonerDTO summonerDTO = restTemplate.getForObject(ApiCommon.SummonerUrl + nickname + ApiCommon.ApiKey, SummonerDTO.class);
+        SummonerDTO summonerDTO = restTemplate.getForObject(ApiCommon.SummonerUrl + nickname + ApiKey, SummonerDTO.class);
         SummonerId = summonerDTO.getId();
         Puuid = summonerDTO.getPuuid();
         summonerName = summonerDTO.getName();
@@ -166,7 +169,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
     @Override
     public List getMatchId() {
         log.info("getMatchId BC 서비스 실행! (API 요청)");
-        matchIdList = restTemplate.getForObject(ApiCommon.MatchIdUrl + Puuid +"/ids"+ ApiCommon.ApiKey, List.class);
+        matchIdList = restTemplate.getForObject(ApiCommon.MatchIdUrl + Puuid +"/ids"+ ApiKey, List.class);
         return matchIdList;
     }
 
@@ -179,7 +182,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
     @Override
     public List leagueSearch() {
         log.info("leagueSearch BC 서비스 실행! (API 요청)");
-        leagueEntryDTO = restTemplate.getForObject(ApiCommon.SummonerInfoUrl + SummonerId + ApiCommon.ApiKey, List.class);
+        leagueEntryDTO = restTemplate.getForObject(ApiCommon.SummonerInfoUrl + SummonerId + ApiKey, List.class);
         return leagueEntryDTO;
     }
 
@@ -198,7 +201,7 @@ public class RecordSearchBCServiceImpl implements RecordSearchBCService {
 
         //MatchCnt 만큼 매치정보를 가져오기
         for(int i=0;i<ApiCommon.MatchCnt;i++) {
-            matchDto = restTemplate.getForObject(ApiCommon.MatchInfoUrl + matchIdList.get(i) + ApiCommon.ApiKey, MatchDto.class);
+            matchDto = restTemplate.getForObject(ApiCommon.MatchInfoUrl + matchIdList.get(i) + ApiKey, MatchDto.class);
             matchDtoList.add(matchDto);
         }
         return matchDtoList;
