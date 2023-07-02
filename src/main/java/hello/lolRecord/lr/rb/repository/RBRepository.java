@@ -33,7 +33,7 @@ public class RBRepository {
     }
 
     public int update(RBInUpDTO inUpDTO){
-        log.info("RB_repository : insert");
+        log.info("RB_repository : update");
         return rbMapper.update(inUpDTO);
     }
 

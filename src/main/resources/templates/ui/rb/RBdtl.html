@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Main page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/assets/css/main.css" />
+
+    <!-- Scripts -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery.scrollex.min.js"></script>
+    <script src="/assets/js/jquery.scrolly.min.js"></script>
+    <script src="/assets/js/browser.min.js"></script>
+    <script src="/assets/js/breakpoints.min.js"></script>
+    <script src="/assets/js/util.js"></script>
+    <script src="/assets/js/main.js"></script>
+</head>
+
+<body class="is-preload">
+<div id="main">
+    <form th:action="@{/LOLRecord/ReportBoard/One/{id}(id=${result.BOARD_ID})}" th:object="${result}" method="post">
+        <label>신고 게시글 상세 조회 </label>
+        <label>게시글 번호</label>
+        <input type="text"  id="BOARD_ID" th:field="*{BOARD_ID}" readonly/>
+        <label>작성자</label>
+        <input type="text"  id="USER_ID" th:field="*{USER_ID}" readonly/>
+        <label>제목</label>
+        <input type="text"  id="TITLE" th:field="${result.TITLE}" />
+        <label>내용</label>
+        <textarea type="text"  id="CONTENTS" th:field="${result.CONTENTS}" />
+        <label>작성일자</label>
+        <input type="date"  id="WRITE_DATE" th:field="${result.WRITE_DATE}" readonly/>
+        <label>신고할 닉네임</label>
+        <input type="text"  id="RPT_NICK" th:field="${result.RPT_NICK}" />
+        <label>조회수</label>
+        <input type="text"  id="VIEW" th:field="${result.VIEW}" readonly/>
+        <label>추천수</label>
+        <input type="text"  id="GOOD" th:field="${result.GOOD}" readonly/>
+        <input type="submit" value="수정">
+    </form>
+</div>
+</body>
+</html>
+<script>
+function selectOne() {
+    $("#board tr").click(function(){
+        var tr = $(this);
+        var td = tr.children();
+        var no = parseInt(td.eq(0).text());
+        var url = '/LOLRecord/ReportBoard/One/'+no;
+        location.href=url;
+
+
+    });
+}
+</script>

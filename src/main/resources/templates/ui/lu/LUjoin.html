@@ -21,33 +21,67 @@
             <div>
                 <label>Join</label>
             </div>
-            <form action="/LOLRecord/lolUser/join" th:object="${LOLUserJoinForm}" method="post">
+            <form action="/LOLRecord/lolUser/join"  method="post">
                 <div class="row gtr-uniform">
                     <div class="col-6 col-12-xsmall">
-                        <input type="text"  id="USER_ID" th:field="*{USER_ID}" placeholder="아이디를 입력해주세요." />
-                        <block th:if ="${joinResult != null}">
-                            <block th:if ="${joinResult.join == 'duplicateFail'}">
-                                <span>이미 존재하는 아이디 입니다.</span>
+                        <label>아이디 : </label>
+                        <input type="text"  id="USER_ID" name="USER_ID"  placeholder="아이디를 입력해주세요." />
+                            <block th:if ="${joinResult != null}">
+                                <block th:if ="${joinResult.join == 'duplicateFail'}">
+                                    <span>이미 존재하는 아이디 입니다.</span>
+                                </block>
                             </block>
-                        </block>
-                        <input type="text"  id="PWD" th:field="*{PWD}" placeholder="비밀번호를 입력해주세요." />
-                        <input type="text"  id="BIRTH" th:field="*{BIRTH}" placeholder="생일을 입력해주세요." />
-                        <input type="text"  id="PHONE" th:field="*{PHONE}" placeholder="핸드폰번호를 입력해주세요." />
-                        <input type="text"  id="ADDRESS" th:field="*{ADDRESS}" placeholder="주소를 입력해주세요." />
-                        <input type="text"  id="GENDER" th:field="*{GENDER}" placeholder="성별을 입력해주세요." />
-                        <input type="text"  id="LOL_NICK" th:field="*{LOL_NICK}" placeholder="롤 닉네임을 입력해주세요." />
-                        <block th:if ="${joinResult != null}">
-                            <block th:if ="${joinResult.join == 'nickCheckFail'}">
-                                <span>롤 닉네임이 존재하지 않거나 이미 등록된 롤 닉네임입니다.</span>
+                        <label>비밀번호 : </label>
+                        <input type="text"  id="PWD"  name="PWD" placeholder="비밀번호를 입력해주세요." />
+                        <label>생일 : </label>
+                        <input type="date"  id="BIRTH" name="BIRTH"  />
+                        <label>휴대폰 번호 : </label>
+                        <input type="text"  id="PHONE" name="PHONE" placeholder="핸드폰번호 -없이 입력해주세요." />
+                        <label>주소 : </label>
+                        <input type="text"  id="ADDRESS"  name="ADDRESS" placeholder="주소를 입력해주세요." />
+                        <label>성별 : </label>
+                        <div class="col-4 col-12-small">
+                            <input type="radio" id="MAN" name="GENDER" th:value="M"  checked>
+                            <label for="MAN">남자</label>
+                        </div>
+                        <div class="col-4 col-12-small">
+                            <input type="radio" id="WOMEN" name="GENDER" th:value="W" >
+                            <label for="WOMEN">여자</label>
+                        </div>
+                        <label>롤 닉네임 : </label>
+                        <input type="text"  id="LOL_NICK" name="LOL_NICK" placeholder="롤 닉네임을 입력해주세요." />
+                            <block th:if ="${joinResult != null}">
+                                <block th:if ="${joinResult.join == 'nickCheckFail'}">
+                                    <span>롤 닉네임이 존재하지 않거나 이미 등록된 롤 닉네임입니다.</span>
+                                </block>
                             </block>
-                        </block>
-                        <input type="text"  id="MAIN_POSITION" th:field="*{MAIN_POSITION}" placeholder="주포지션을 입력해주세요." />
-                        <input type="text"  id="SUB_POSITION" th:field="*{SUB_POSITION}" placeholder="부포지션을 입력해주세요." />
-                        <block th:if ="${joinResult != null}">
-                            <block th:if ="${joinResult.join == 'success'}">
-                                <span>롤 닉네임 체크 완료!  회원 가입 완료했습니다!</span>
+                        <label>주 포지션 : </label>
+                        <div class="col-12">
+                            <select  id="MAIN_POSITION" name="MAIN_POSITION">
+                                <option value="">- 선택 -</option>
+                                <option value="TOP">TOP</option>
+                                <option value="JUG">JUG</option>
+                                <option value="MID">MID</option>
+                                <option value="ADC">ADC</option>
+                                <option value="SUP">SUP</option>
+                            </select>
+                        </div>
+                        <label>부 포지션 : </label>
+                        <div class="col-12">
+                            <select  id="SUB_POSITION" name="SUB_POSITION">
+                                <option value="">- 선택 -</option>
+                                <option value="TOP">TOP</option>
+                                <option value="JUG">JUG</option>
+                                <option value="MID">MID</option>
+                                <option value="ADC">ADC</option>
+                                <option value="SUP">SUP</option>
+                            </select>
+                        </div>
+                            <block th:if ="${joinResult != null}">
+                                <block th:if ="${joinResult.join == 'success'}">
+                                    <span>롤 닉네임 체크 완료!  회원 가입 완료했습니다!</span>
+                                </block>
                             </block>
-                        </block>
                         <input class="button primary" type="submit" value="회원가입">
                     </div>
                 </div>

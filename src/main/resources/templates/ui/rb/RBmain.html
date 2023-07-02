@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Main page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/assets/css/main.css" />
+
+    <!-- Scripts -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery.scrollex.min.js"></script>
+    <script src="/assets/js/jquery.scrolly.min.js"></script>
+    <script src="/assets/js/browser.min.js"></script>
+    <script src="/assets/js/breakpoints.min.js"></script>
+    <script src="/assets/js/util.js"></script>
+    <script src="/assets/js/main.js"></script>
+</head>
+
+<body class="is-preload">
+<div id="main">
+    <table id="board" border ="1">
+        <tr>
+            <td>번호</td>
+            <td>제목</td>
+            <td>작성자</td>
+            <td>조회수</td>
+            <td>추천수</td>
+        </tr>
+        <block th:each ="Result,ResultStat : ${result}">
+            <tr >
+                <td th:text ="${Result.BOARD_ID}"></td>
+                <td th:text ="${Result.TITLE}" onclick="selectOne()"></td>
+                <td th:text ="${Result.USER_ID}"></td>
+                <td th:text ="${Result.VIEW}"></td>
+                <td th:text ="${Result.GOOD}"></td>
+            </tr>
+        </block>
+    </table>
+</div>
+</body>
+</html>
+<script>
+function selectOne() {
+    $("#board tr").click(function(){
+        var tr = $(this);
+        var td = tr.children();
+        var no = parseInt(td.eq(0).text());
+        var url = '/LOLRecord/ReportBoard/One/'+no;
+        location.href=url;
+
+
+    });
+}
+</script>

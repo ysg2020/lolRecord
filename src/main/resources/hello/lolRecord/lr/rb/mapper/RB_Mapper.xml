@@ -5,7 +5,8 @@
 
     <select id="selectOne" parameterType="int" resultType="hello.lolRecord.lr.rb.dto.RBSelectOneDTO">
         SELECT
-             USER_ID
+            BOARD_ID
+            ,USER_ID
             ,TITLE
             ,CONTENTS
             ,WRITE_DATE

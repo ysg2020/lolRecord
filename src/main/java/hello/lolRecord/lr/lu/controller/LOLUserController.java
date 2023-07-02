@@ -61,7 +61,7 @@ public class LOLUserController {
 
     }
     @GetMapping(value = "/joinForm")
-    public String joinForm(@ModelAttribute LOLUserJoinForm lolUserJoinForm){
+    public String joinForm(){
         log.info("LU join");
         return "ui/lu/LUjoin";
     }

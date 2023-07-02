@@ -4,6 +4,7 @@ import hello.lolRecord.lr.rb.dto.RBInUpDTO;
 import hello.lolRecord.lr.rb.dto.RBSelectListDTO;
 import hello.lolRecord.lr.rb.dto.RBSelectOneDTO;
 import hello.lolRecord.lr.rb.repository.RBRepository;
+import hello.lolRecord.lr.rb.service.RBService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RBServiceImpl {
+public class RBServiceImpl implements RBService {
 
     private final RBRepository rbRepository;
 
