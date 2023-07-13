@@ -41,7 +41,7 @@
     <select id="selectList" resultType="hello.lolRecord.lr.rb.dto.RBSelectListDTO">
             SELECT A.*
                 ,row_number() over(order by BOARD_ID) AS ROW_NUM
-                ,count(1) AS TOT_NUM
+                ,count(*) OVER() AS TOT_NUM
             FROM
                 (SELECT
                     BOARD_ID

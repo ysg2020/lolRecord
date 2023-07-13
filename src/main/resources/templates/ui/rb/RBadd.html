@@ -19,33 +19,22 @@
 
 <body class="is-preload">
 <div id="main">
-    <h6>신고글 리스트</h6>
-    <div>
-        <table id="board" border ="1">
-            <tr>
-                <td>번호</td>
-                <td>제목</td>
-                <td>작성자</td>
-                <td>조회수</td>
-                <td>추천수</td>
-            </tr>
-            <block th:each ="Result,ResultStat : ${result}">
-                <tr >
-                    <td th:text ="${Result.BOARD_ID}"></td>
-                    <td th:text ="${Result.TITLE}" onclick="selectOne()"></td>
-                    <td th:text ="${Result.USER_ID}"></td>
-                    <td th:text ="${Result.VIEW}"></td>
-                    <td th:text ="${Result.GOOD}"></td>
-                </tr>
-            </block>
-        </table>
-    </div>
-    <div>
-        <input type="button" onclick="insertForm()" value="신고글 작성" />
-    </div>
+    <form th:action="@{/LOLRecord/ReportBoard/One}"  method="post">
+        <label>신고 게시글 작성 </label>
+        <label>작성자</label>
+        <input type="text"  id="USER_ID" name="USER_ID"/>
+        <label>제목</label>
+        <input type="text"  id="TITLE" name="TITLE" />
+        <label>내용</label>
+        <textarea type="text"  id="CONTENTS" name="CONTENTS" ></textarea>
+        <label>신고할 닉네임</label>
+        <input type="text"  id="RPT_NICK" name="RPT_NICK" />
+        <input type="submit" value="등록">
+    </form>
 </div>
 </body>
 </html>
+
 <script>
 function selectOne() {
     $("#board tr").click(function(){
@@ -54,9 +43,8 @@ function selectOne() {
         var no = parseInt(td.eq(0).text());
         var url = '/LOLRecord/ReportBoard/One/'+no;
         location.href=url;
+
+
     });
-}
-function insertForm() {
-    location.href='/LOLRecord/ReportBoard/One';
 }
 </script>

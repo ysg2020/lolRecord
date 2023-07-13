@@ -37,21 +37,36 @@
         <input type="text"  id="VIEW" th:field="${result.VIEW}" readonly/>
         <label>추천수</label>
         <input type="text"  id="GOOD" th:field="${result.GOOD}" readonly/>
-        <input type="submit" value="수정">
+        <button type="submit" data-oper="modify" class="btn btn-default" />수정</button>
+        <button type="submit" data-oper="remove" class="btn btn-default" >삭제</button>
+        <button type="submit" data-oper="list" class="btn btn-default" >목록</button>
     </form>
 </div>
 </body>
 </html>
 <script>
-function selectOne() {
-    $("#board tr").click(function(){
-        var tr = $(this);
-        var td = tr.children();
-        var no = parseInt(td.eq(0).text());
-        var url = '/LOLRecord/ReportBoard/One/'+no;
-        location.href=url;
+	$(document).ready(function() {
+		var formObj = $("form");
+		$('button').on("click", function(e) { 		//모든 button태그에 대한 클릭 이벤트 처리
+			e.preventDefault(); 			//버튼의 기본 submit() 동작 막기
+			var operation = $(this).data("oper");	//data-oper 값 읽어오기
+			console.log(operation);
 
-
-    });
-}
+			if (operation === 'remove') {
+				if (confirm("게시글을 삭제하시겠습니까?") == true) {
+					alert("게시글이 삭제되었습니다.");
+					formObj.attr("action", "/LOLRecord/ReportBoard/remove");
+				} else {
+					return false;
+				}
+			} else if (operation === 'list') {
+				//move to list
+				formObj.attr("action", "/LOLRecord/ReportBoard/List").attr("method", "get");	//삭제인 경우 action값을 변경
+				formObj.empty(); //list페이지로 이동시에는 form 데이터가 필요없으므로 내용을 비움
+			} else {
+				alert("게시글이 수정되었습니다.");
+			}
+			formObj.submit();
+		})
+	})
 </script>

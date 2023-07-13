@@ -23,7 +23,18 @@ public class RBController {
         mv.addObject("result",rbService.selectList());
         return mv;
     }
-
+    @GetMapping(value="/One")
+    public String insertForm(){
+        return "ui/rb/RBadd";
+    }
+    @PostMapping(value="/One")
+    public ModelAndView insert(@ModelAttribute RBInUpDTO rbInUpDTO,  ModelAndView mv){
+        log.info("RBController insert : {}",rbInUpDTO.getUSER_ID());
+        mv.addObject("result",rbService.insert(rbInUpDTO));
+        //등록 후 재조회
+        mv.setViewName("redirect:/LOLRecord/ReportBoard/List");
+        return mv;
+    }
     @GetMapping(value="/One/{board_id}")
     public ModelAndView selectOne(@PathVariable int board_id, ModelAndView mv){
         log.info("RBController : selectOne");
@@ -37,8 +48,18 @@ public class RBController {
         log.info("RBController : update");
         log.info("rbInUpDTO : {}",rbInUpDTO.getBOARD_ID());
         rbService.update(rbInUpDTO);
-        //업데이트 후 재조회
+        //수정 후 재조회
         mv.setViewName("redirect:/LOLRecord/ReportBoard/One/{board_id}");
+        return mv;
+    }
+
+    @PostMapping(value="/remove")
+    public ModelAndView delete(@ModelAttribute RBInUpDTO rbInUpDTO, ModelAndView mv){
+        log.info("RBController : delete");
+        log.info("rbInUpDTO : {}",rbInUpDTO.getBOARD_ID());
+        rbService.delete(rbInUpDTO.getBOARD_ID());
+        //삭제 후 재조회
+        mv.setViewName("redirect:/LOLRecord/ReportBoard/List");
         return mv;
     }
 
