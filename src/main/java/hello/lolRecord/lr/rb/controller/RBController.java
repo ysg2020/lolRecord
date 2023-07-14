@@ -1,5 +1,7 @@
 package hello.lolRecord.lr.rb.controller;
 
+import hello.lolRecord.lr.lu.dto.LOLUserJoinForm;
+import hello.lolRecord.lr.lu.service.LOLUserService;
 import hello.lolRecord.lr.rb.dto.RBInUpDTO;
 import hello.lolRecord.lr.rb.dto.RBSelectOneDTO;
 import hello.lolRecord.lr.rb.service.RBService;
@@ -8,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Slf4j
 @Controller
@@ -24,15 +29,32 @@ public class RBController {
         return mv;
     }
     @GetMapping(value="/One")
-    public String insertForm(){
-        return "ui/rb/RBadd";
+    public ModelAndView insertForm(ModelAndView mv, HttpServletRequest request){
+        //로그인한 사용자 id를 작성자에 기본값으로 세팅
+        HttpSession session = request.getSession(false);
+        LOLUserJoinForm loginUser = (LOLUserJoinForm) session.getAttribute("LoginUser");
+        mv.setViewName("ui/rb/RBadd");
+        log.info(" RBController : insertForm");
+        log.info(" user_id : {} ",loginUser.getUSER_ID());
+        mv.addObject("user_id",loginUser.getUSER_ID());
+        return mv;
     }
     @PostMapping(value="/One")
-    public ModelAndView insert(@ModelAttribute RBInUpDTO rbInUpDTO,  ModelAndView mv){
+    public ModelAndView insert(@ModelAttribute RBInUpDTO rbInUpDTO,  ModelAndView mv,HttpServletRequest request){
         log.info("RBController insert : {}",rbInUpDTO.getUSER_ID());
-        mv.addObject("result",rbService.insert(rbInUpDTO));
-        //등록 후 재조회
-        mv.setViewName("redirect:/LOLRecord/ReportBoard/List");
+        //로그인한 사용자 id를 작성자에 기본값으로 세팅
+        HttpSession session = request.getSession(false);
+        LOLUserJoinForm loginUser = (LOLUserJoinForm) session.getAttribute("LoginUser");
+        mv.addObject("user_id",loginUser.getUSER_ID());
+        log.info("왜또 안가져와 가져왔잖아 {}",rbInUpDTO.getTITLE());
+        int result = rbService.insert(rbInUpDTO);
+        if(result != -1){
+            //등록 후 재조회
+            mv.setViewName("redirect:/LOLRecord/ReportBoard/List");
+        }else {
+            mv.addObject("result",-1);
+            mv.setViewName("ui/rb/RBadd");
+        }
         return mv;
     }
     @GetMapping(value="/One/{board_id}")

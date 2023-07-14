@@ -1,5 +1,6 @@
 package hello.lolRecord.lr.rb.service.impl;
 
+import hello.lolRecord.lr.lu.service.LOLUserService;
 import hello.lolRecord.lr.rb.dto.RBInUpDTO;
 import hello.lolRecord.lr.rb.dto.RBSelectListDTO;
 import hello.lolRecord.lr.rb.dto.RBSelectOneDTO;
@@ -17,6 +18,7 @@ import java.util.List;
 public class RBServiceImpl implements RBService {
 
     private final RBRepository rbRepository;
+    private final LOLUserService lolUserService;
 
 
     public RBSelectOneDTO selectOne(int board_id){
@@ -26,7 +28,12 @@ public class RBServiceImpl implements RBService {
 
     public int insert(RBInUpDTO inUpDTO){
         log.info("RB_serviceImpl : insert");
-        return rbRepository.insert(inUpDTO);
+        //신고한 닉네임 존재하는지 체크
+        String nickCheck = lolUserService.summonerNickCheck(inUpDTO.getRPT_NICK());
+        if(nickCheck != null){
+            return rbRepository.insert(inUpDTO);
+        }
+        return -1;
     }
 
     public List<RBSelectListDTO> selectList(){

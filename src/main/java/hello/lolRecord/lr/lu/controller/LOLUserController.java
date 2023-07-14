@@ -40,11 +40,11 @@ public class LOLUserController {
     }
 
     @GetMapping
-    public ModelAndView main(@Login String Login ,ModelAndView mv){
+    public ModelAndView main(@Login LOLUserJoinForm LoginUser ,ModelAndView mv){
         log.info("LU 메인");
-        log.info("Login : {}",Login);
+        log.info("Login : {}",LoginUser);
         mv.setViewName("ui/lu/LUmain");
-        if(Login != "success"){
+        if(LoginUser == null){
             log.info("세션이 없습니다!!");
             mv.addObject("login","false");
             return mv;
@@ -77,12 +77,12 @@ public class LOLUserController {
             return mv;
         }
 
-        String login = lolUserService.login(lolUserLoginForm);
+        LOLUserJoinForm loginUserInfo = lolUserService.login(lolUserLoginForm);
 
-        if(login.equals("success")){
+        if(loginUserInfo != null){
             log.info("로그인 성공!!");
             HttpSession session = request.getSession();
-            session.setAttribute("LoginUser" , login);
+            session.setAttribute("LoginUser" , loginUserInfo);
             mv.setViewName("redirect:/LOLRecord/lolUser");
         }else {
             log.info("로그인 실패!!");

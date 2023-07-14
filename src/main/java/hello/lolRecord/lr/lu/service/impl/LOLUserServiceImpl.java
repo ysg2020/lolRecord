@@ -27,12 +27,12 @@ public class LOLUserServiceImpl implements LOLUserService{
     private final RecordSearchBCService recordSearchBCService;
 
     @Override
-    public String login(LOLUserLoginForm lolUserLoginForm) throws SQLException {
+    public LOLUserJoinForm login(LOLUserLoginForm lolUserLoginForm) throws SQLException {
         String pwd = lolUserMybatisRepository.findPwd(lolUserLoginForm.getUSER_ID());
         if(lolUserLoginForm.getPWD().equals(pwd)){
-            return "success";
+            return lolUserMybatisRepository.findUser(lolUserLoginForm.getUSER_ID());
         } else{
-            return "fail";
+            return null;
         }
     }
 

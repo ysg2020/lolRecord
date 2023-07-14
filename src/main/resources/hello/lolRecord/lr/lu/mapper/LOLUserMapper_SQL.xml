@@ -35,4 +35,19 @@
         SELECT LOL_NICK FROM LOL_USER
         WHERE LOL_NICK = #{LOL_NICK}
     </select>
+
+    <select id="findUser" resultType="LOLUserJoinForm">
+        SELECT
+            USER_ID
+            ,PWD
+            ,BIRTH
+            ,PHONE
+            ,ADDRESS
+            ,GENDER
+            ,LOL_NICK
+            ,MAIN_POSITION
+            ,SUB_POSITION
+        FROM LOL_USER
+        WHERE USER_ID = #{USER_ID}
+    </select>
 </mapper>

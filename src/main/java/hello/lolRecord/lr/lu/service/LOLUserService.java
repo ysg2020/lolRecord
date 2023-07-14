@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public interface LOLUserService {
-    public String login(LOLUserLoginForm lolUser) throws SQLException;
+    public LOLUserJoinForm login(LOLUserLoginForm lolUser) throws SQLException;
     public Map join(LOLUserJoinForm lolUser) throws SQLException;
     public String summonerNickCheck(String nickname);
 }

@@ -30,4 +30,9 @@ public class LOLUserMybatisRepository {
         return lolUserMapper.findNick(nickname);
 
     }
+    public LOLUserJoinForm findUser(String user_id){
+        log.info("Mybatis findUser");
+        return lolUserMapper.findUser(user_id);
+
+    }
 }
