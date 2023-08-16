@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hello.lolRecord.lr.sr2.mapper.SRMapper">
+    <resultMap id="SummonerDTO" type="hello.lolRecord.lr.sr2.dto.SummonerDTO">
+        <result column="SMR_ID" property="id" />
+        <result column="PUU_ID" property="puuid" />
+        <result column="SMR_NAME" property="name"/>
+        <result column="MATCH_ID" property="matchId"/>
+    </resultMap>
+    <resultMap id="ParticipantDto" type="hello.lolRecord.lr.sr2.dto.ParticipantDto">
+        <result column="SMR_NAME" property="summonerName" />
+        <result column="MATCH_ID" property="matchId" />
+        <result column="LANE" property="lane" />
+        <result column="CHAMP" property="championName" />
+        <result column="KILLS" property="kills"/>
+        <result column="ASSISTS" property="assists"/>
+        <result column="DEATHS" property="deaths"/>
+        <result column="WIN" property="win"/>
+        <result column="TOT_DMG" property="totalDamageDealtToChampions"/>
+        <result column="TOT_DMG_TAKEN" property="totalDamageTaken"/>
+        <result column="GOLD" property="goldEarned"/>
+        <result column="TOT_MINION" property="totalMinionsKilled"/>
+        <result column="N_MINION" property="neutralMinionsKilled"/>
+    </resultMap>
+    <resultMap id="LeagueEntryDTO" type="hello.lolRecord.lr.sr2.dto.LeagueEntryDTO">
+        <result column="SMR_NAME" property="summonerName" />
+        <result column="QUEUE_TYPE" property="queueType" />
+        <result column="TIER" property="tier" />
+        <result column="RANK" property="rank"/>
+        <result column="POINTS" property="leaguePoints"/>
+        <result column="WINS" property="wins"/>
+        <result column="LOSSES" property="losses"/>
+    </resultMap>
+
+    <select id="getSmr" resultMap="SummonerDTO" parameterType="String">
+        SELECT
+            SMR_ID
+            ,PUU_ID
+            ,SMR_NAME
+        FROM SUMMONER
+        WHERE 1=1
+            AND SMR_NAME = #{SMR_NAME}
+    </select>
+
+    <insert id="setSmr"  parameterType="hello.lolRecord.lr.sr2.dto.SummonerDTO">
+        INSERT INTO SUMMONER(
+            SMR_ID
+            ,PUU_ID
+            ,SMR_NAME)
+        values(
+            #{id}
+            ,#{puuid}
+            ,#{name})
+
+    </insert>
+
+    <update id="editSmr"  parameterType="hello.lolRecord.lr.sr2.dto.SummonerDTO">
+        UPDATE SUMMONER SET
+            SMR_NAME = #{name}
+        WHERE 1=1
+            AND SMR_ID = #{id}
+
+
+
+    </update>
+
+    <select id="getMatch" parameterType="String" resultType="String">
+        SELECT
+            MATCH_ID
+        FROM MATCH
+        WHERE 1=1
+            AND PUU_ID = #{PUU_ID}
+        ORDER BY MATCH_ID DESC
+    </select>
+
+    <insert id="setMatch" parameterType="hello.lolRecord.lr.sr2.dto.SummonerDTO">
+        INSERT INTO MATCH(
+            MATCH_ID
+            ,PUU_ID)
+        values(
+            #{matchId}
+            ,#{puuid})
+
+    </insert>
+
+    <delete id="removeMatch" parameterType="String">
+        DELETE FROM MATCH
+        WHERE 1=1
+            AND PUU_ID = #{PUU_ID}
+    </delete>
+
+    <select id="getPtip" resultMap="ParticipantDto" parameterType="String">
+        SELECT
+            SMR_NAME
+            ,LANE
+            ,CHAMP
+            ,KILLS
+            ,ASSISTS
+            ,DEATHS
+            ,WIN
+            ,TOT_DMG
+            ,TOT_DMG_TAKEN
+            ,GOLD
+            ,TOT_MINION
+            ,N_MINION
+        FROM PTIP
+        WHERE 1=1
+            AND MATCH_ID = #{matchId}
+    </select>
+
+    <select id="getMyPtip" resultMap="ParticipantDto" parameterType="String">
+        SELECT
+            SMR_NAME
+            ,LANE
+            ,CHAMP
+            ,KILLS
+            ,ASSISTS
+            ,DEATHS
+            ,WIN
+            ,TOT_DMG
+            ,TOT_DMG_TAKEN
+            ,GOLD
+            ,TOT_MINION
+            ,N_MINION
+        FROM PTIP
+        WHERE 1=1
+            AND PUU_ID = #{PUU_ID}
+        ORDER BY MATCH_ID DESC
+    </select>
+
+    <insert id="setPtip" parameterType="hello.lolRecord.lr.sr2.dto.ParticipantDto">
+        INSERT INTO PTIP(
+            PUU_ID
+            ,MATCH_ID
+            ,SMR_NAME
+            ,LANE
+            ,CHAMP
+            ,KILLS
+            ,ASSISTS
+            ,DEATHS
+            ,WIN
+            ,TOT_DMG
+            ,TOT_DMG_TAKEN
+            ,GOLD
+            ,TOT_MINION
+            ,N_MINION)
+        values(
+            #{puuid}
+            ,#{matchId}
+            ,#{summonerName}
+            ,#{lane}
+            ,#{championName}
+            ,#{kills}
+            ,#{assists}
+            ,#{deaths}
+            ,#{win}
+            ,#{totalDamageDealtToChampions}
+            ,#{totalDamageTaken}
+            ,#{goldEarned}
+            ,#{totalMinionsKilled}
+            ,#{neutralMinionsKilled})
+
+    </insert>
+
+    <delete id="removePtip" parameterType="String">
+        DELETE FROM PTIP
+        WHERE 1=1
+            AND MATCH_ID = #{MATCH_ID}
+    </delete>
+
+    <select id="getLeague"  resultMap="LeagueEntryDTO" parameterType="String">
+        SELECT
+            SMR_NAME
+            ,QUE_TYPE
+            ,TIER
+            ,RANK
+            ,POINTS
+            ,WINS
+            ,LOSSES
+        FROM LEAGUE
+        WHERE 1=1
+            AND SMR_ID = #{SMR_ID}
+    </select>
+
+    <insert id="setLeague" parameterType="java.util.List">
+        INSERT INTO LEAGUE(
+            SMR_NAME
+            ,SMR_ID
+            ,QUE_TYPE
+            ,TIER
+            ,RANK
+            ,POINTS
+            ,WINS
+            ,LOSSES)
+        values
+        <foreach collection="list" item="item">
+            (
+            #{item.summonerName}
+            ,#{item.summonerId}
+            ,#{item.queueType}
+            ,#{item.tier}
+            ,#{item.rank}
+            ,#{item.leaguePoints}
+            ,#{item.wins}
+            ,#{item.losses})
+        </foreach>
+    </insert>
+
+    <update id="editLeague" parameterType="java.util.List">
+        UPDATE LEAGUE SET
+        <foreach collection="list" item="item">
+            SMR_NAME = #{item.summonerName}
+            ,QUE_TYPE = #{item.queueType}
+            ,TIER = #{item.tier}
+            ,RANK = #{item.rank}
+            ,POINTS = #{item.leaguePoints}
+            ,WINS = #{item.wins}
+            ,LOSSES = #{item.losses}
+        WHERE 1=1
+            AND SMR_ID = #{item.summonerId}
+        </foreach>
+    </update>
+
+</mapper>

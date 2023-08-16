@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/assets/css/main.css" />
+
+    <!-- Scripts -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery.scrollex.min.js"></script>
+    <script src="/assets/js/jquery.scrolly.min.js"></script>
+    <script src="/assets/js/browser.min.js"></script>
+    <script src="/assets/js/breakpoints.min.js"></script>
+    <script src="/assets/js/util.js"></script>
+    <script src="/assets/js/main.js"></script>
+
+</head>
+<body class="is-preload">
+<div id="main">
+    <div class="row gtr-uniform">
+        <div class="col-6 col-12-xsmall">
+            <input type="text"  id="name" value="" placeholder="닉네임을 입력해주세요." />
+        </div>
+        <div class="col-6 col-12-xsmall">
+            <input class="button primary" type="button" onclick="search()" id="matchRequest" value="소환사 전적 조회">
+        </div>
+    </div>
+    <div class="col-6 col-12-xsmall">
+        <input class="button primary" type="button" onclick="refresh()" id="matchRefresh" value="전적 갱신">
+    </div>
+    <block th:if ="${matchSearch.myLeague != null}">
+        <div>
+            <span id ="summonerName" th:text ="${matchSearch.myLeague.summonerName}">소환사 닉네임</span>
+            <span>의 전적 정보</span>
+        </div>
+
+        <div class="col-6 col-12-xsmall">
+            <div>
+                <span th:text ="${matchSearch.myLeague.tier}">소환사 티어</span>
+                <span th:text ="${matchSearch.myLeague.rank}">소환사 랭크</span>
+                <span th:text ="${matchSearch.myLeague.leaguePoints}">소환사 리그점수</span>
+                <span>점</span>
+            </div>
+            <div>
+                <span th:text ="${matchSearch.myLeague.wins}">소환사 승리횟수</span>
+                <span>승</span>
+                <span th:text ="${matchSearch.myLeague.losses}">소환사 패배횟수</span>
+                <span>패</span>
+            </div>
+            <!--<div>
+                <span>현재 </span>
+                <span th:text ="${result.result.winLoseing.winLoseingCnt}">횟수</span>
+                <span th:text ="${result.result.winLoseing.winLose}">연승 연패 여부</span>
+                <span>중입니다.</span>
+            </div>-->
+        </div>
+    </block>
+    <block th:if ="${matchSearch.myLeague == null} and ${matchSearch.nickName != null}">
+        <div>
+            <span id = "nickName" th:text="${matchSearch.nickName}">갱신이 되지 않은 닉네임</span>
+            <span>해당 닉네임으로 저장되어 있는 전적이 없습니다. 먼저 전적 갱신을 해주세요!</span>
+        </div>
+    </block>
+
+    <block th:if ="${matchSearch.myLeague} == null and ${matchSearch.nickName} == null">
+        <div>
+            <span>해당 닉네임은 존재하지 않는 닉네임입니다!</span>
+        </div>
+    </block>
+<!--
+<div>
+    <label>최근 플레이한 챔피언 목록 : </label>
+    <select class="col-12" id="selPlayChampList" onchange="selPlayChamp()">
+        <option th:each="playChamp : ${result.result.playChamp}"
+                th:text="${playChamp}" th:selected="${result.result.championName}==${playChamp}"></option>
+    </select>
+</div>-->
+    <div class="table-wrapper">
+        <table id="match" border ="1">
+            <tr>
+                <td>index</td>
+                <td>win</td>
+                <td>champion</td>
+                <td>kills</td>
+                <td>deaths</td>
+                <td>assists</td>
+                <td>+</td>
+            </tr>
+            <block th:if ="${matchSearch.myPtip != null}">
+                <block th:each ="Result,ResultStat : ${matchSearch.myPtip}">
+                    <block th:if="${Result.win}">
+                        <tr bgcolor="#D4E4FE">
+                            <td th:text="${ResultStat.index}"></td> <!--현재 index  -->
+                            <td>승</td>
+                            <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/}+${Result.championName}+@{.png}"></td>
+                            <td th:text ="${Result.kills}"></td>
+                            <td th:text ="${Result.deaths}"></td>
+                            <td th:text ="${Result.assists}"></td>
+                            <td onclick="searchDtl()">+</td>
+                        </tr>
+                    </block>
+                    <block th:unless="${Result.win}">
+                        <tr bgcolor="#FFEEEE">
+                            <td th:text="${ResultStat.index}"></td> <!--현재 index  -->
+                            <td>패</td>
+                            <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.15.1/img/champion/}+${Result.championName}+@{.png}"></td>
+                            <td th:text ="${Result.kills}"></td>
+                            <td th:text ="${Result.deaths}"></td>
+                            <td th:text ="${Result.assists}"></td>
+                            <td onclick="searchDtl()">+</td>
+                        </tr>
+                    </block>
+                </block>
+            </block>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
+<script>
+
+function search() {
+    var nickname = $("#name").val();
+    location.href='/LOLRecord/search2/summoners/'+nickname;
+}
+
+function refresh() {
+    var nickname = $("#summonerName").text();
+    if(nickname != ""){
+        console.log("처음 이후 갱신");
+        location.href='/LOLRecord/search2/summoners/re/'+nickname;
+    }else {
+        console.log("첫 갱신");
+        nickname = $("#nickName").text();
+        location.href='/LOLRecord/search2/summoners/re/'+nickname;
+    }
+
+}
+
+function searchDtl() {
+    $("#match tr").click(function(){
+        var nickname = $("#summonerName").text();
+        console.log("nickname",nickname);
+        var tr = $(this);
+        var td = tr.children();
+        var no = parseInt(td.eq(0).text());
+        var url ='/LOLRecord/search2/summoners/'+nickname+'/'+no;
+
+        location.href=url;
+
+    });
+}
+function selPlayChamp() {
+    var nickname = $("#summonerName").text();
+    var championName = $("#selPlayChampList").val();
+    if(championName != "-전체-"){
+        location.href='/LOLRecord/search/summonerMatchSearchV3?nickName='+nickname+'&championName='+championName;
+    }else {
+        location.href='/LOLRecord/search/summonerMatchSearchV3?nickName='+nickname;
+    }
+}
+
+</script>

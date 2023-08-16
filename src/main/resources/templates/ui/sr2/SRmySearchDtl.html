@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/assets/css/main.css" />
+
+    <!-- Scripts -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery.scrollex.min.js"></script>
+    <script src="/assets/js/jquery.scrolly.min.js"></script>
+    <script src="/assets/js/browser.min.js"></script>
+    <script src="/assets/js/breakpoints.min.js"></script>
+    <script src="/assets/js/util.js"></script>
+    <script src="/assets/js/main.js"></script>
+
+</head>
+<body class="is-preload">
+<div id="main">
+    <div class="row gtr-uniform">
+        <div class="col-6 col-12-xsmall">
+            <input type="text"  id="name" value="" placeholder="닉네임을 입력해주세요." />
+        </div>
+        <div class="col-6 col-12-xsmall">
+            <input class="button primary" type="button" onclick="search()" id="matchRequest" value="소환사 전적 조회">
+        </div>
+    </div>
+
+
+
+    <div class="table-wrapper">
+        <table border ="1">
+            <tr>
+                <td>summonerName</td>
+                <td>championName</td>
+                <td>kills</td>
+                <td>deaths</td>
+                <td>assists</td>
+                <td>damage</td>
+                <td>takenDamage</td>
+                <td>gold</td>
+                <td>cs</td>
+            </tr>
+
+            <block th:each ="Result : ${matchSearchDtl.result}">
+                    <tr>
+                        <td th:text ="${Result.summonerName}"></td>
+                        <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.15.1/img/champion/}+${Result.championName}+@{.png}"></td>
+                        <td th:text ="${Result.kills}"></td>
+                        <td th:text ="${Result.deaths}"></td>
+                        <td th:text ="${Result.assists}"></td>
+                        <td th:text ="${Result.totalDamageDealtToChampions}"></td>
+                        <td th:text ="${Result.totalDamageTaken}"></td>
+                        <td th:text ="${Result.goldEarned}"></td>
+                        <td th:text ="${Result.totalMinionsKilled}+${Result.neutralMinionsKilled}"></td>
+                    </tr>
+            </block>
+        </table>
+    </div>
+</block>
+</div>
+
+</body>
+</html>
+<script>
+
+function search() {
+    var nickname = $("#name").val();
+    location.href='/LOLRecord/search2/summoners/'+nickname;
+}
+
+
+</script>

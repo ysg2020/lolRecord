@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/assets/css/main.css" />
+
+    <!-- Scripts -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery.scrollex.min.js"></script>
+    <script src="/assets/js/jquery.scrolly.min.js"></script>
+    <script src="/assets/js/browser.min.js"></script>
+    <script src="/assets/js/breakpoints.min.js"></script>
+    <script src="/assets/js/util.js"></script>
+    <script src="/assets/js/main.js"></script>
+</head>
+<body class="is-preload">
+        <div id="main">
+            <div>
+                <label>롤 전적 검색 서비스</label>
+            </div>
+            <div class="row gtr-uniform">
+                <div class="col-6 col-12-xsmall">
+                    <input type="text"  id="name" value="" placeholder="닉네임을 입력해주세요." />
+                </div>
+                <div class="col-6 col-12-xsmall">
+                    <input class="button primary" type="button" onclick="search()" id="matchRequest" value="소환사 전적 조회">
+                </div>
+            </div>
+        </div>
+</body>
+</html>
+<script>
+function search() {
+    var nickname = $("#name").val();
+    location.href='/LOLRecord/search2/summoners/'+nickname;
+}
+</script>
