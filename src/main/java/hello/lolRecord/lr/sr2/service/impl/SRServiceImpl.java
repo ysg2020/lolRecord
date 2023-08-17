@@ -1,5 +1,6 @@
 package hello.lolRecord.lr.sr2.service.impl;
 
+import hello.lolRecord.lr.sr2.dto.SummonerDTO;
 import hello.lolRecord.lr.sr2.service.MatchService;
 import hello.lolRecord.lr.sr2.service.SRService;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +29,32 @@ public class SRServiceImpl implements SRService {
     }
 
     @Override
-    public Map matchRefresh(String nickName) {
-        matchService.addMatch(nickName);
+    public Map matchRefresh(String nickName,String user_id) {
+        matchService.addMatch(nickName,user_id);
         return matchService.getMyMatch(nickName);
     }
 
     @Override
     public Map matchSearchDtl(String nickName , int matchNum) {
         return matchService.getMatch(nickName,matchNum);
+    }
+
+    @Override
+    public Map myMatchSearchUserID(String user_id) {
+        Map result = new HashMap();
+        String nickName;
+        //1. 해당 유저 id로 저장되어있는 소환사 정보를 가져온다
+        SummonerDTO summoner = matchService.summonerUserID(user_id);
+        //2. 없는 경우
+        if(summoner == null){
+            log.info("해당 유저 id가 세팅 안되어 있음  >> 전적 갱신이 안되어 있음");
+            result.put("myPtip",null);
+            result.put("myLeague",null);
+            result.put("nickName",null);
+            return result;
+        }
+
+        nickName = summoner.getName();
+        return matchService.getMyMatch(nickName);
     }
 }

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/assets/css/main.css" />
+
+    <!-- Scripts -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery.scrollex.min.js"></script>
+    <script src="/assets/js/jquery.scrolly.min.js"></script>
+    <script src="/assets/js/browser.min.js"></script>
+    <script src="/assets/js/breakpoints.min.js"></script>
+    <script src="/assets/js/util.js"></script>
+    <script src="/assets/js/main.js"></script>
+
+</head>
+<body class="is-preload">
+<div id="main">
+    <div class="row gtr-uniform">
+        <block th:if ="${matchSearch.myLeague != null}">
+            <div>
+                <span id ="summonerName" th:text ="${matchSearch.myLeague.summonerName}">소환사 닉네임</span>
+                <span>의 전적 정보</span>
+            </div>
+        </block>
+    </div>
+    <div class="col-6 col-12-xsmall">
+        <label>신고할 닉네임이 있는 전적을 선택해주세요</label>
+    </div>
+    <block th:if ="${matchSearch.myLeague == null} and ${matchSearch.nickName == null}">
+        <div>
+            <span>해당 계정으로 등록한 롤 닉네임으로 전적 갱신이 되어있지 않습니다. 먼저 전적검색 서비스에서 전적 갱신을 한 뒤에 작성해주세요!</span>
+        </div>
+    </block>
+
+    <div class="table-wrapper">
+        <table id="match" border ="1">
+            <tr>
+                <td>index</td>
+                <td>win</td>
+                <td>champion</td>
+                <td>kills</td>
+                <td>deaths</td>
+                <td>assists</td>
+                <td>+</td>
+            </tr>
+            <block th:if ="${matchSearch.myPtip != null}">
+                <block th:each ="Result,ResultStat : ${matchSearch.myPtip}">
+                    <block th:if="${Result.win}">
+                        <tr bgcolor="#D4E4FE">
+                            <td th:text="${ResultStat.index}"></td> <!--현재 index  -->
+                            <td>승</td>
+                            <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/}+${Result.championName}+@{.png}"></td>
+                            <td th:text ="${Result.kills}"></td>
+                            <td th:text ="${Result.deaths}"></td>
+                            <td th:text ="${Result.assists}"></td>
+                            <td onclick="searchDtl()">+</td>
+                        </tr>
+                    </block>
+                    <block th:unless="${Result.win}">
+                        <tr bgcolor="#FFEEEE">
+                            <td th:text="${ResultStat.index}"></td> <!--현재 index  -->
+                            <td>패</td>
+                            <td><img width="60px" height="60px" th:src="@{http://ddragon.leagueoflegends.com/cdn/13.15.1/img/champion/}+${Result.championName}+@{.png}"></td>
+                            <td th:text ="${Result.kills}"></td>
+                            <td th:text ="${Result.deaths}"></td>
+                            <td th:text ="${Result.assists}"></td>
+                            <td onclick="searchDtl()">+</td>
+                        </tr>
+                    </block>
+                </block>
+            </block>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
+<script>
+
+function search() {
+    var nickname = $("#name").val();
+    location.href='/LOLRecord/search2/summoners/'+nickname;
+}
+
+function searchDtl() {
+    $("#match tr").click(function(){
+        var nickname = $("#summonerName").text();
+        console.log("nickname",nickname);
+        var tr = $(this);
+        var td = tr.children();
+        var no = parseInt(td.eq(0).text());
+        var url ='/LOLRecord/ReportBoard/One/'+nickname+'/'+no;
+
+        location.href=url;
+
+    });
+}
+</script>

@@ -1,5 +1,6 @@
 package hello.lolRecord.lr.sr2.controller;
 
+import hello.lolRecord.lr.lu.dto.LOLUserJoinForm;
 import hello.lolRecord.lr.sr2.service.SRService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
@@ -27,9 +30,11 @@ public class SRController {
         return mv.addObject("matchSearch",srService.matchSearch(nickName));
     }
     @GetMapping("/summoners/re/{nickName}")
-    public ModelAndView matchRefresh(@PathVariable String nickName,ModelAndView mv){
+    public ModelAndView matchRefresh(@PathVariable String nickName, ModelAndView mv, HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        LOLUserJoinForm loginUser = (LOLUserJoinForm) session.getAttribute("LoginUser");
         mv.setViewName("ui/sr2/SRmySearch");
-        return mv.addObject("matchSearch",srService.matchRefresh(nickName));
+        return mv.addObject("matchSearch",srService.matchRefresh(nickName,loginUser.getUSER_ID()));
     }
 
     @GetMapping("/summoners/{nickName}/{matchNum}")

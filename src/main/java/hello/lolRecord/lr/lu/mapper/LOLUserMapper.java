@@ -13,4 +13,6 @@ public interface LOLUserMapper {
     String findNick(String lol_nick);
 
     LOLUserJoinForm findUser(String user_id);
+
+    String findLOLNick(String user_id);
 }

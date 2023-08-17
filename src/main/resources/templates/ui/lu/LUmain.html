@@ -24,6 +24,7 @@
             <block th:if ="${login}">
                 <div class="col-6 col-12-xsmall">
                     <input class="button primary" type="button" onclick="lolSearchService()" value="롤 전적 검색">
+                    <input class="button primary" type="button" onclick="RBService()" value="신고글 목록">
                     <input class="button primary" type="button" onclick="logout()" value="로그아웃">
                 </div>
             </block>
@@ -44,7 +45,10 @@ function joinForm() {
     location.href='/LOLRecord/lolUser/joinForm';
 }
 function lolSearchService() {
-    location.href='/LOLRecord/search';
+    location.href='/LOLRecord/search2';
+}
+function RBService() {
+    location.href='/LOLRecord/ReportBoard/List';
 }
 function logout() {
     location.href='/LOLRecord/lolUser/logout';

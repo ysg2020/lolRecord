@@ -9,8 +9,9 @@ import java.util.Map;
 public interface SRService {
 
     public Map matchSearch(String nickName);
-    public Map matchRefresh(String nickName);
+    public Map matchRefresh(String nickName,String user_id);
     public Map matchSearchDtl(String nickName, int matchNum);
+    Map myMatchSearchUserID(String user_id);
 
 
 }

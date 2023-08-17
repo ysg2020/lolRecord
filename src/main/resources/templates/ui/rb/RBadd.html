@@ -22,18 +22,13 @@
     <form th:action="@{/LOLRecord/ReportBoard/One}"  method="post">
         <label>신고 게시글 작성 </label>
         <label>작성자</label>
-        <input type="text"  id="USER_ID" name="USER_ID" th:value="${user_id}" />
+        <input type="text"  id="USER_ID" name="USER_ID" th:value="${user_id}" readonly/>
         <label>제목</label>
         <input type="text"  id="TITLE" name="TITLE" />
         <label>내용</label>
         <textarea type="text"  id="CONTENTS" name="CONTENTS" ></textarea>
         <label>신고할 닉네임</label>
-        <input type="text"  id="RPT_NICK" name="RPT_NICK" />
-        <block th:if ="${result != null}">
-            <block th:if ="${result == -1}">
-                <p>롤 닉네임이 존재하지 않습니다.</p>
-            </block>
-        </block>
+        <input type="text"  id="RPT_NICK" name="RPT_NICK" th:value="${rptNickname}" readonly/>
         <input type="submit" value="등록">
     </form>
 </div>

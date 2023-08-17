@@ -1,5 +1,6 @@
 package hello.lolRecord.lr.sr2.service.impl;
 
+import hello.lolRecord.lr.lu.repository.LOLUserMybatisRepository;
 import hello.lolRecord.lr.sr2.dto.*;
 import hello.lolRecord.lr.sr2.repository.SRRepository;
 import hello.lolRecord.lr.sr2.service.MatchService;
@@ -17,9 +18,10 @@ import java.util.*;
 public class MatchServiceImpl implements MatchService {
 
     private final SRRepository srRepository;
+    private final LOLUserMybatisRepository lolUserMybatisRepository;
 
     @Override
-    public void addMatch(String nickName) {
+    public void addMatch(String nickName,String user_id) {
         log.info("SRServiceImpl : matchSearch");
         //소환사,리그정보 갱신 로직
         //1. 검색하려는 롤 닉네임을 통해 소환사 정보가 저장(존재하는지) 되어있는지 체크
@@ -28,7 +30,11 @@ public class MatchServiceImpl implements MatchService {
         //1-2. 갱신할 소환사,리그정보들을 가져온다.
         SummonerDTO SmrAPI = srRepository.getSmrAPI(nickName);
         List<LeagueEntryDTO> leagueAPI = srRepository.getLeagueAPI(SmrAPI.getId());
-        //1-3. 없는 경우 API 요청 후 DB에 저장(insert / update)
+        //1-3. 로그인한 유저의 롤 닉네임이 검색한 닉네임과 같으면 유저 ID값 세팅해준다.
+        if(lolUserMybatisRepository.findLOLNick(user_id).equals(nickName)){
+            SmrAPI.setUserId(user_id);
+        }
+        //1-4. DB에 저장 (insert / update)
         if(Smr == null){
             log.info("SRServiceImpl : setSmr_start");
             //소환사,리그 정보 insert
@@ -146,6 +152,12 @@ public class MatchServiceImpl implements MatchService {
             log.info("MatchServiceImpl : 존재하지 않는 닉네임");
             return false;
         }
+    }
+
+    @Override
+    public SummonerDTO summonerUserID(String user_id) {
+        return  srRepository.getSmrUserID(user_id);
+
     }
 
 }

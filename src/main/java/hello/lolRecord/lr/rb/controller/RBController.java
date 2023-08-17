@@ -5,6 +5,7 @@ import hello.lolRecord.lr.lu.service.LOLUserService;
 import hello.lolRecord.lr.rb.dto.RBInUpDTO;
 import hello.lolRecord.lr.rb.dto.RBSelectOneDTO;
 import hello.lolRecord.lr.rb.service.RBService;
+import hello.lolRecord.lr.sr2.service.SRService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpSession;
 public class RBController {
 
     private final RBService rbService;
+    private final SRService srService;
 
     @GetMapping(value="/List")
     public ModelAndView selectList(ModelAndView mv){
@@ -33,10 +35,28 @@ public class RBController {
         //로그인한 사용자 id를 작성자에 기본값으로 세팅
         HttpSession session = request.getSession(false);
         LOLUserJoinForm loginUser = (LOLUserJoinForm) session.getAttribute("LoginUser");
+        mv.setViewName("ui/rb/RBmySearch");
+        log.info(" RBController : insertForm");
+        log.info(" user_id : {} ",loginUser.getUSER_ID());
+        mv.addObject("user_id",loginUser.getUSER_ID());
+        mv.addObject("matchSearch",srService.myMatchSearchUserID(loginUser.getUSER_ID()));
+        return mv;
+    }
+    @GetMapping("/One/{nickName}/{matchNum}")
+    public ModelAndView matchSearchDtl(@PathVariable String nickName,@PathVariable int matchNum,ModelAndView mv){
+        mv.setViewName("ui/rb/RBmySearchDtl");
+        return mv.addObject("matchSearchDtl",srService.matchSearchDtl(nickName,matchNum));
+    }
+    @GetMapping(value="/One/rpt/{rptNickname}")
+    public ModelAndView insertFormRpt(@PathVariable String rptNickname, ModelAndView mv, HttpServletRequest request){
+        //로그인한 사용자 id를 작성자에 기본값으로 세팅
+        HttpSession session = request.getSession(false);
+        LOLUserJoinForm loginUser = (LOLUserJoinForm) session.getAttribute("LoginUser");
         mv.setViewName("ui/rb/RBadd");
         log.info(" RBController : insertForm");
         log.info(" user_id : {} ",loginUser.getUSER_ID());
         mv.addObject("user_id",loginUser.getUSER_ID());
+        mv.addObject("rptNickname",rptNickname);
         return mv;
     }
     @PostMapping(value="/One")
@@ -46,7 +66,6 @@ public class RBController {
         HttpSession session = request.getSession(false);
         LOLUserJoinForm loginUser = (LOLUserJoinForm) session.getAttribute("LoginUser");
         mv.addObject("user_id",loginUser.getUSER_ID());
-        log.info("왜또 안가져와 가져왔잖아 {}",rbInUpDTO.getTITLE());
         int result = rbService.insert(rbInUpDTO);
         if(result != -1){
             //등록 후 재조회

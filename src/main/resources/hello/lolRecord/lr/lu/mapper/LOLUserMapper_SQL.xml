@@ -32,8 +32,19 @@
     </insert>
 
     <select id="findNick" resultType="String">
-        SELECT LOL_NICK FROM LOL_USER
-        WHERE LOL_NICK = #{LOL_NICK}
+        SELECT
+            LOL_NICK
+        FROM LOL_USER
+        WHERE 1=1
+            AND LOL_NICK = #{LOL_NICK}
+    </select>
+
+    <select id="findLOLNick" resultType="String">
+        SELECT
+            LOL_NICK
+        FROM LOL_USER
+        WHERE 1=1
+            AND USER_ID = #{USER_ID}
     </select>
 
     <select id="findUser" resultType="LOLUserJoinForm">
