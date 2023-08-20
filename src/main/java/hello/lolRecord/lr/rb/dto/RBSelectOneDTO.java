@@ -8,8 +8,8 @@ import lombok.Setter;
 public class RBSelectOneDTO {
 
     private int BOARD_ID;
-    private String USER_ID;
     private String TITLE;
+    private String WRITER;
     private String CONTENTS;
     private String WRITE_DATE;
     private String RPT_NICK;

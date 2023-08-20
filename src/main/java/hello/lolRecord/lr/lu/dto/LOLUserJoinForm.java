@@ -8,7 +8,8 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class LOLUserJoinForm {
-
+    @NotBlank
+    private int USER_NO;
     @NotBlank
     private String USER_ID;
 

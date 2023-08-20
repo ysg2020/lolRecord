@@ -43,14 +43,14 @@
             AND SMR_NAME = #{SMR_NAME}
     </select>
 
-    <select id="getSmrUserID" resultMap="SummonerDTO" parameterType="String">
+    <select id="getSmrUserID" resultMap="SummonerDTO" parameterType="int">
         SELECT
             SMR_ID
             ,PUU_ID
             ,SMR_NAME
         FROM SUMMONER
         WHERE 1=1
-            AND USER_ID = #{USER_ID}
+            AND USER_NO = #{USER_NO}
     </select>
 
     <insert id="setSmr"  parameterType="hello.lolRecord.lr.sr2.dto.SummonerDTO">
@@ -58,19 +58,19 @@
             SMR_ID
             ,PUU_ID
             ,SMR_NAME
-            ,USER_ID)
+            ,USER_NO)
         values(
             #{id}
             ,#{puuid}
             ,#{name}
-            ,#{userId})
+            ,#{userNo})
 
     </insert>
 
     <update id="editSmr"  parameterType="hello.lolRecord.lr.sr2.dto.SummonerDTO">
         UPDATE SUMMONER SET
             SMR_NAME = #{name}
-            ,USER_ID = #{userId}
+            ,USER_NO = #{userNo}
         WHERE 1=1
             AND SMR_ID = #{id}
 

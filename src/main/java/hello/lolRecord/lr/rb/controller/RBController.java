@@ -32,14 +32,11 @@ public class RBController {
     }
     @GetMapping(value="/One")
     public ModelAndView insertForm(ModelAndView mv, HttpServletRequest request){
-        //로그인한 사용자 id를 작성자에 기본값으로 세팅
+        //로그인한 사용자의 롤 닉네임으로 기본 조회
         HttpSession session = request.getSession(false);
         LOLUserJoinForm loginUser = (LOLUserJoinForm) session.getAttribute("LoginUser");
         mv.setViewName("ui/rb/RBmySearch");
-        log.info(" RBController : insertForm");
-        log.info(" user_id : {} ",loginUser.getUSER_ID());
-        mv.addObject("user_id",loginUser.getUSER_ID());
-        mv.addObject("matchSearch",srService.myMatchSearchUserID(loginUser.getUSER_ID()));
+        mv.addObject("matchSearch",srService.myMatchSearchUserID(loginUser.getUSER_NO()));
         return mv;
     }
     @GetMapping("/One/{nickName}/{matchNum}")
@@ -49,23 +46,17 @@ public class RBController {
     }
     @GetMapping(value="/One/rpt/{rptNickname}")
     public ModelAndView insertFormRpt(@PathVariable String rptNickname, ModelAndView mv, HttpServletRequest request){
-        //로그인한 사용자 id를 작성자에 기본값으로 세팅
+        //로그인한 사용자의 롤 닉네임을 작성자에 기본값으로 세팅
         HttpSession session = request.getSession(false);
         LOLUserJoinForm loginUser = (LOLUserJoinForm) session.getAttribute("LoginUser");
         mv.setViewName("ui/rb/RBadd");
-        log.info(" RBController : insertForm");
-        log.info(" user_id : {} ",loginUser.getUSER_ID());
-        mv.addObject("user_id",loginUser.getUSER_ID());
+        mv.addObject("writer",loginUser.getLOL_NICK());
         mv.addObject("rptNickname",rptNickname);
         return mv;
     }
     @PostMapping(value="/One")
-    public ModelAndView insert(@ModelAttribute RBInUpDTO rbInUpDTO,  ModelAndView mv,HttpServletRequest request){
-        log.info("RBController insert : {}",rbInUpDTO.getUSER_ID());
-        //로그인한 사용자 id를 작성자에 기본값으로 세팅
-        HttpSession session = request.getSession(false);
-        LOLUserJoinForm loginUser = (LOLUserJoinForm) session.getAttribute("LoginUser");
-        mv.addObject("user_id",loginUser.getUSER_ID());
+    public ModelAndView insert(@ModelAttribute RBInUpDTO rbInUpDTO,  ModelAndView mv){
+        log.info("RBController insert");
         int result = rbService.insert(rbInUpDTO);
         if(result != -1){
             //등록 후 재조회
@@ -77,10 +68,21 @@ public class RBController {
         return mv;
     }
     @GetMapping(value="/One/{board_id}")
-    public ModelAndView selectOne(@PathVariable int board_id, ModelAndView mv){
+    public ModelAndView selectOne(@PathVariable int board_id, ModelAndView mv,HttpServletRequest request){
         log.info("RBController : selectOne");
         mv.setViewName("ui/rb/RBdtl");
-        mv.addObject("result",rbService.selectOne(board_id));
+        //로그인한 사용자 ID와 작성자와 같을경우 수정삭제 가능
+        HttpSession session = request.getSession(false);
+        LOLUserJoinForm loginUser = (LOLUserJoinForm) session.getAttribute("LoginUser");
+        RBSelectOneDTO rbSelectOneDTO = rbService.selectOne(board_id);
+        String writer = rbSelectOneDTO.getWRITER();
+        if(writer.equals(loginUser.getLOL_NICK())){
+            mv.addObject("UD", "Y");
+            mv.addObject("result", rbSelectOneDTO);
+            return mv;
+        }
+        mv.addObject("UD", "N");
+        mv.addObject("result", rbSelectOneDTO);
         return mv;
     }
 

@@ -23,22 +23,24 @@
         <label>신고 게시글 상세 조회 </label>
         <label>게시글 번호</label>
         <input type="text"  id="BOARD_ID" th:field="*{BOARD_ID}" readonly/>
-        <label>작성자</label>
-        <input type="text"  id="USER_ID" th:field="*{USER_ID}" readonly/>
         <label>제목</label>
-        <input type="text"  id="TITLE" th:field="${result.TITLE}" />
+        <input type="text"  id="TITLE" th:field="${result.TITLE}" th:disabled="${UD == 'N'}"/>
+        <label>작성자</label>
+        <input type="text"  id="WRITER" th:field="*{WRITER}" readonly/>
         <label>내용</label>
-        <textarea type="text"  id="CONTENTS" th:field="${result.CONTENTS}" />
+        <textarea type="text"  id="CONTENTS" th:field="${result.CONTENTS}" th:disabled="${UD == 'N'}"/>
         <label>작성일자</label>
         <input type="date"  id="WRITE_DATE" th:field="${result.WRITE_DATE}" readonly/>
         <label>신고할 닉네임</label>
-        <input type="text"  id="RPT_NICK" th:field="${result.RPT_NICK}" />
+        <input type="text"  id="RPT_NICK" th:field="${result.RPT_NICK}" readonly/>
         <label>조회수</label>
         <input type="text"  id="VIEW" th:field="${result.VIEW}" readonly/>
         <label>추천수</label>
         <input type="text"  id="GOOD" th:field="${result.GOOD}" readonly/>
-        <button type="submit" data-oper="modify" class="btn btn-default" />수정</button>
-        <button type="submit" data-oper="remove" class="btn btn-default" >삭제</button>
+        <block th:if ="${UD == 'Y'}">
+            <button type="submit" data-oper="modify" class="btn btn-default" />수정</button>
+            <button type="submit" data-oper="remove" class="btn btn-default" >삭제</button>
+        </block>
         <button type="submit" data-oper="list" class="btn btn-default" >목록</button>
     </form>
 </div>

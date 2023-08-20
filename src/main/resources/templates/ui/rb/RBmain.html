@@ -26,6 +26,7 @@
                 <td>번호</td>
                 <td>제목</td>
                 <td>작성자</td>
+                <td>작성일자</td>
                 <td>조회수</td>
                 <td>추천수</td>
             </tr>
@@ -33,7 +34,8 @@
                 <tr >
                     <td th:text ="${Result.BOARD_ID}"></td>
                     <td th:text ="${Result.TITLE}" onclick="selectOne()"></td>
-                    <td th:text ="${Result.USER_ID}"></td>
+                    <td th:text ="${Result.WRITER}"></td>
+                    <td th:text ="${Result.WRITE_DATE}"></td>
                     <td th:text ="${Result.VIEW}"></td>
                     <td th:text ="${Result.GOOD}"></td>
                 </tr>

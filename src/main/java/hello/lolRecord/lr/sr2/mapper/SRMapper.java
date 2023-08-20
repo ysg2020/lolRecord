@@ -9,7 +9,7 @@ import java.util.List;
 public interface SRMapper {
 
     SummonerDTO getSmr(String nickName);
-    SummonerDTO getSmrUserID(String user_id);
+    SummonerDTO getSmrUserID(int user_no);
     void setSmr(SummonerDTO summonerDTO);
     void editSmr(SummonerDTO summonerDTO);
     List<String> getMatch(String puu_id);

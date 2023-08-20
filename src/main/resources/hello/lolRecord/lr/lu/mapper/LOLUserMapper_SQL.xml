@@ -39,17 +39,18 @@
             AND LOL_NICK = #{LOL_NICK}
     </select>
 
-    <select id="findLOLNick" resultType="String">
+    <select id="findLOLNick" parameterType="int" resultType="String">
         SELECT
             LOL_NICK
         FROM LOL_USER
         WHERE 1=1
-            AND USER_ID = #{USER_ID}
+            AND USER_NO = #{USER_NO}
     </select>
 
     <select id="findUser" resultType="LOLUserJoinForm">
         SELECT
-            USER_ID
+            USER_NO
+            ,USER_ID
             ,PWD
             ,BIRTH
             ,PHONE

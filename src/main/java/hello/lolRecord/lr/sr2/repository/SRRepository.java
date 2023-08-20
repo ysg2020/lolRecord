@@ -24,8 +24,8 @@ public class SRRepository {
     public SummonerDTO getSmr(String nickName){
         return srMapper.getSmr(nickName);
     }
-    public SummonerDTO getSmrUserID(String user_id){
-        return srMapper.getSmrUserID(user_id);
+    public SummonerDTO getSmrUserID(int user_no){
+        return srMapper.getSmrUserID(user_no);
     }
     public SummonerDTO getSmrAPI(String nickName) throws HttpClientErrorException {
         return restTemplate.getForObject(ApiCommon.SummonerUrl + nickName + ApiKey, SummonerDTO.class);

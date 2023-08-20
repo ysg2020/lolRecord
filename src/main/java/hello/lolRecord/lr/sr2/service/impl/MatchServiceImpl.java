@@ -21,7 +21,7 @@ public class MatchServiceImpl implements MatchService {
     private final LOLUserMybatisRepository lolUserMybatisRepository;
 
     @Override
-    public void addMatch(String nickName,String user_id) {
+    public void addMatch(String nickName,int user_no) {
         log.info("SRServiceImpl : matchSearch");
         //소환사,리그정보 갱신 로직
         //1. 검색하려는 롤 닉네임을 통해 소환사 정보가 저장(존재하는지) 되어있는지 체크
@@ -31,8 +31,8 @@ public class MatchServiceImpl implements MatchService {
         SummonerDTO SmrAPI = srRepository.getSmrAPI(nickName);
         List<LeagueEntryDTO> leagueAPI = srRepository.getLeagueAPI(SmrAPI.getId());
         //1-3. 로그인한 유저의 롤 닉네임이 검색한 닉네임과 같으면 유저 ID값 세팅해준다.
-        if(lolUserMybatisRepository.findLOLNick(user_id).equals(nickName)){
-            SmrAPI.setUserId(user_id);
+        if(lolUserMybatisRepository.findLOLNick(user_no).equals(nickName)){
+            SmrAPI.setUserNo(user_no);
         }
         //1-4. DB에 저장 (insert / update)
         if(Smr == null){
@@ -155,8 +155,8 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public SummonerDTO summonerUserID(String user_id) {
-        return  srRepository.getSmrUserID(user_id);
+    public SummonerDTO summonerUserID(int user_no) {
+        return  srRepository.getSmrUserID(user_no);
 
     }
 

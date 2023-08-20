@@ -34,7 +34,7 @@ public class SRController {
         HttpSession session = request.getSession(false);
         LOLUserJoinForm loginUser = (LOLUserJoinForm) session.getAttribute("LoginUser");
         mv.setViewName("ui/sr2/SRmySearch");
-        return mv.addObject("matchSearch",srService.matchRefresh(nickName,loginUser.getUSER_ID()));
+        return mv.addObject("matchSearch",srService.matchRefresh(nickName,loginUser.getUSER_NO()));
     }
 
     @GetMapping("/summoners/{nickName}/{matchNum}")

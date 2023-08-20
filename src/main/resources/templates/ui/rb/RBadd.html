@@ -22,7 +22,7 @@
     <form th:action="@{/LOLRecord/ReportBoard/One}"  method="post">
         <label>신고 게시글 작성 </label>
         <label>작성자</label>
-        <input type="text"  id="USER_ID" name="USER_ID" th:value="${user_id}" readonly/>
+        <input type="text"  id="WRITER" name="WRITER" th:value="${writer}" readonly/>
         <label>제목</label>
         <input type="text"  id="TITLE" name="TITLE" />
         <label>내용</label>

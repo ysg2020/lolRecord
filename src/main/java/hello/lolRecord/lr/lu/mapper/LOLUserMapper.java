@@ -14,5 +14,5 @@ public interface LOLUserMapper {
 
     LOLUserJoinForm findUser(String user_id);
 
-    String findLOLNick(String user_id);
+    String findLOLNick(int user_no);
 }

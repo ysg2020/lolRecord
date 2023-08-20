@@ -29,8 +29,8 @@ public class SRServiceImpl implements SRService {
     }
 
     @Override
-    public Map matchRefresh(String nickName,String user_id) {
-        matchService.addMatch(nickName,user_id);
+    public Map matchRefresh(String nickName,int user_no) {
+        matchService.addMatch(nickName,user_no);
         return matchService.getMyMatch(nickName);
     }
 
@@ -40,11 +40,11 @@ public class SRServiceImpl implements SRService {
     }
 
     @Override
-    public Map myMatchSearchUserID(String user_id) {
+    public Map myMatchSearchUserID(int user_no) {
         Map result = new HashMap();
         String nickName;
         //1. 해당 유저 id로 저장되어있는 소환사 정보를 가져온다
-        SummonerDTO summoner = matchService.summonerUserID(user_id);
+        SummonerDTO summoner = matchService.summonerUserID(user_no);
         //2. 없는 경우
         if(summoner == null){
             log.info("해당 유저 id가 세팅 안되어 있음  >> 전적 갱신이 안되어 있음");

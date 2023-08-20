@@ -12,7 +12,7 @@ public class SummonerDTO {
     private String puuid;
     private String summonerLevel;
     private String name;
-    private String userId;
+    private int userNo;
 
 
 
