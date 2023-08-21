@@ -47,8 +47,5 @@ public class RBRepository {
         return rbMapper.updateViewCnt(board_id);
     }
 
-    public int updateGoodCnt(int board_id){
-        log.info("RB_repository : updateGoodCnt");
-        return rbMapper.updateGoodCnt(board_id);
-    }
+
 }

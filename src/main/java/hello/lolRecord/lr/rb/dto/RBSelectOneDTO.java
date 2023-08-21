@@ -15,7 +15,7 @@ public class RBSelectOneDTO {
     private String RPT_NICK;
     private int VIEW;
     private int GOOD;
-
+    private String UD;
 
 
 }

@@ -55,9 +55,14 @@ public class RBController {
         return mv;
     }
     @PostMapping(value="/One")
-    public ModelAndView insert(@ModelAttribute RBInUpDTO rbInUpDTO,  ModelAndView mv){
+    public ModelAndView insert(@ModelAttribute RBInUpDTO rbInUpDTO,  ModelAndView mv,HttpServletRequest request){
         log.info("RBController insert");
-        int result = rbService.insert(rbInUpDTO);
+        //1. 로그인한 사용자의 고유번호를 가져온다.
+        HttpSession session = request.getSession(false);
+        LOLUserJoinForm loginUser = (LOLUserJoinForm) session.getAttribute("LoginUser");
+        int user_no = loginUser.getUSER_NO();
+        //2. 신고글 등록
+        int result = rbService.insert(rbInUpDTO,user_no);
         if(result != -1){
             //등록 후 재조회
             mv.setViewName("redirect:/LOLRecord/ReportBoard/List");
@@ -71,17 +76,12 @@ public class RBController {
     public ModelAndView selectOne(@PathVariable int board_id, ModelAndView mv,HttpServletRequest request){
         log.info("RBController : selectOne");
         mv.setViewName("ui/rb/RBdtl");
-        //로그인한 사용자 ID와 작성자와 같을경우 수정삭제 가능
+        //1. 로그인한 사용자의 롤 닉네임을 가져온다.
         HttpSession session = request.getSession(false);
         LOLUserJoinForm loginUser = (LOLUserJoinForm) session.getAttribute("LoginUser");
-        RBSelectOneDTO rbSelectOneDTO = rbService.selectOne(board_id);
-        String writer = rbSelectOneDTO.getWRITER();
-        if(writer.equals(loginUser.getLOL_NICK())){
-            mv.addObject("UD", "Y");
-            mv.addObject("result", rbSelectOneDTO);
-            return mv;
-        }
-        mv.addObject("UD", "N");
+        String login_nick = loginUser.getLOL_NICK();
+        //2. 신고글 상세 조회
+        RBSelectOneDTO rbSelectOneDTO = rbService.selectOne(board_id,login_nick);
         mv.addObject("result", rbSelectOneDTO);
         return mv;
     }

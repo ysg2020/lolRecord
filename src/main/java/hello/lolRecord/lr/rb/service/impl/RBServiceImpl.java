@@ -21,14 +21,25 @@ public class RBServiceImpl implements RBService {
     private final LOLUserService lolUserService;
 
 
-    public RBSelectOneDTO selectOne(int board_id){
+    public RBSelectOneDTO selectOne(int board_id,String login_nick){
         log.info("RB_serviceImpl : selectOne");
-        return rbRepository.selectOne(board_id);
+        RBSelectOneDTO rbSelectOneDTO = rbRepository.selectOne(board_id);
+        //1. 로그인한 사용자의 롤 닉네임과 해당 신고글의 닉네임(작성자)이 다를 경우
+        // >> 신고글 작성자 본인이 아닐 경우에만 조회수 증가 및 수정 삭제 버튼 비활성화
+        if(!rbSelectOneDTO.getWRITER().equals(login_nick)){
+            rbRepository.updateViewCnt(board_id);
+            rbSelectOneDTO.setUD("N");
+        }else{
+            rbSelectOneDTO.setUD("Y");
+        }
+        return rbSelectOneDTO;
     }
 
-    public int insert(RBInUpDTO inUpDTO){
+    public int insert(RBInUpDTO inUpDTO,int user_no){
         log.info("RB_serviceImpl : insert");
-        //신고한 닉네임 존재하는지 체크
+        //1. 로그인한 사용자 고유번호를 세팅해준다.
+        inUpDTO.setUSER_NO(user_no);
+        //2. 신고한 닉네임 존재하는지 체크한다.
         String nickCheck = lolUserService.summonerNickCheck(inUpDTO.getRPT_NICK());
         if(nickCheck != null){
             return rbRepository.insert(inUpDTO);
@@ -56,8 +67,4 @@ public class RBServiceImpl implements RBService {
         return rbRepository.updateViewCnt(board_id);
     }
 
-    public int updateGoodCnt(int board_id){
-        log.info("RB_serviceImpl : updateGoodCnt");
-        return rbRepository.updateGoodCnt(board_id);
-    }
 }

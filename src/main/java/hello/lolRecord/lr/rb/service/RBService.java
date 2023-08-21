@@ -8,13 +8,12 @@ import java.util.List;
 
 
 public interface RBService {
-    public RBSelectOneDTO selectOne(int board_id);
-    public int insert(RBInUpDTO inUpDTO);
+    public RBSelectOneDTO selectOne(int board_id,String login_nick);
+    public int insert(RBInUpDTO inUpDTO,int user_no);
     public List<RBSelectListDTO> selectList();
     public int update(RBInUpDTO inUpDTO);
     public int delete(int board_id);
     public int updateViewCnt(int board_id);
-    public int updateGoodCnt(int board_id);
 
 
 }

@@ -24,20 +24,18 @@
         <label>게시글 번호</label>
         <input type="text"  id="BOARD_ID" th:field="*{BOARD_ID}" readonly/>
         <label>제목</label>
-        <input type="text"  id="TITLE" th:field="${result.TITLE}" th:disabled="${UD == 'N'}"/>
+        <input type="text"  id="TITLE" th:field="${result.TITLE}" th:disabled="${result.UD == 'N'}"/>
         <label>작성자</label>
         <input type="text"  id="WRITER" th:field="*{WRITER}" readonly/>
         <label>내용</label>
-        <textarea type="text"  id="CONTENTS" th:field="${result.CONTENTS}" th:disabled="${UD == 'N'}"/>
+        <textarea type="text"  id="CONTENTS" th:field="${result.CONTENTS}" th:disabled="${result.UD == 'N'}"/>
         <label>작성일자</label>
         <input type="date"  id="WRITE_DATE" th:field="${result.WRITE_DATE}" readonly/>
         <label>신고할 닉네임</label>
         <input type="text"  id="RPT_NICK" th:field="${result.RPT_NICK}" readonly/>
         <label>조회수</label>
         <input type="text"  id="VIEW" th:field="${result.VIEW}" readonly/>
-        <label>추천수</label>
-        <input type="text"  id="GOOD" th:field="${result.GOOD}" readonly/>
-        <block th:if ="${UD == 'Y'}">
+        <block th:if ="${result.UD} == 'Y'">
             <button type="submit" data-oper="modify" class="btn btn-default" />수정</button>
             <button type="submit" data-oper="remove" class="btn btn-default" >삭제</button>
         </block>

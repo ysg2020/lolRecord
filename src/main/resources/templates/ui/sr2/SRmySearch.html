@@ -49,12 +49,6 @@
                 <span th:text ="${matchSearch.myLeague.losses}">소환사 패배횟수</span>
                 <span>패</span>
             </div>
-            <!--<div>
-                <span>현재 </span>
-                <span th:text ="${result.result.winLoseing.winLoseingCnt}">횟수</span>
-                <span th:text ="${result.result.winLoseing.winLose}">연승 연패 여부</span>
-                <span>중입니다.</span>
-            </div>-->
         </div>
     </block>
     <block th:if ="${matchSearch.myLeague == null} and ${matchSearch.nickName != null}">
@@ -69,14 +63,6 @@
             <span>해당 닉네임은 존재하지 않는 닉네임입니다!</span>
         </div>
     </block>
-<!--
-<div>
-    <label>최근 플레이한 챔피언 목록 : </label>
-    <select class="col-12" id="selPlayChampList" onchange="selPlayChamp()">
-        <option th:each="playChamp : ${result.result.playChamp}"
-                th:text="${playChamp}" th:selected="${result.result.championName}==${playChamp}"></option>
-    </select>
-</div>-->
     <div class="table-wrapper">
         <table id="match" border ="1">
             <tr>
@@ -152,15 +138,6 @@ function searchDtl() {
         location.href=url;
 
     });
-}
-function selPlayChamp() {
-    var nickname = $("#summonerName").text();
-    var championName = $("#selPlayChampList").val();
-    if(championName != "-전체-"){
-        location.href='/LOLRecord/search/summonerMatchSearchV3?nickName='+nickname+'&championName='+championName;
-    }else {
-        location.href='/LOLRecord/search/summonerMatchSearchV3?nickName='+nickname;
-    }
 }
 
 </script>

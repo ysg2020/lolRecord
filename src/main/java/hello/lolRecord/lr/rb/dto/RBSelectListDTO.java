@@ -7,8 +7,6 @@ import lombok.Setter;
 @Setter
 public class RBSelectListDTO {
 
-    private int ROW_NUM;
-    private int TOT_NUM;
     private int BOARD_ID;
     private String TITLE;
     private String WRITER;

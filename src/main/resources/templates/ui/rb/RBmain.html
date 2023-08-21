@@ -28,7 +28,6 @@
                 <td>작성자</td>
                 <td>작성일자</td>
                 <td>조회수</td>
-                <td>추천수</td>
             </tr>
             <block th:each ="Result,ResultStat : ${result}">
                 <tr >
@@ -37,7 +36,6 @@
                     <td th:text ="${Result.WRITER}"></td>
                     <td th:text ="${Result.WRITE_DATE}"></td>
                     <td th:text ="${Result.VIEW}"></td>
-                    <td th:text ="${Result.GOOD}"></td>
                 </tr>
             </block>
         </table>

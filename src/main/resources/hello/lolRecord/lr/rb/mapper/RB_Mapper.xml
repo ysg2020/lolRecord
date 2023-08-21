@@ -12,7 +12,6 @@
             ,WRITE_DATE
             ,RPT_NICK
             ,VIEW
-            ,GOOD
         FROM REPORT_BOARD
         WHERE 1=1
             AND BOARD_ID = #{BOARD_ID}
@@ -26,8 +25,7 @@
             ,CONTENTS
             ,WRITE_DATE
             ,RPT_NICK
-            ,VIEW
-            ,GOOD)
+            ,VIEW)
         values(
             #{USER_NO}
             ,#{TITLE}
@@ -35,27 +33,19 @@
             ,#{CONTENTS}
             ,now()
             ,#{RPT_NICK}
-            ,0
             ,0)
 
     </insert>
 
     <select id="selectList" resultType="hello.lolRecord.lr.rb.dto.RBSelectListDTO">
-            SELECT A.*
-                ,row_number() over(order by BOARD_ID) AS ROW_NUM
-                ,count(*) OVER() AS TOT_NUM
-            FROM
-                (SELECT
-                    BOARD_ID
-                    ,TITLE
-                    ,WRITER
-                    ,WRITE_DATE
-                    ,VIEW
-                    ,GOOD
-                FROM REPORT_BOARD
-                WHERE 1=1
-                ) A
-            WHERE 1=1
+        SELECT
+            BOARD_ID
+            ,TITLE
+            ,WRITER
+            ,WRITE_DATE
+            ,VIEW
+        FROM REPORT_BOARD
+        WHERE 1=1
     </select>
 
     <update id="update" parameterType="hello.lolRecord.lr.rb.dto.RBInUpDTO">
@@ -77,14 +67,6 @@
     <update id="updateViewCnt" parameterType="int">
         UPDATE REPORT_BOARD
         SET VIEW = VIEW + 1
-        WHERE 1=1
-            AND BOARD_ID = #{BOARD_ID}
-
-    </update>
-
-    <update id="updateGoodCnt" parameterType="int">
-        UPDATE REPORT_BOARD
-        SET GOOD = GOOD + 1
         WHERE 1=1
             AND BOARD_ID = #{BOARD_ID}
 

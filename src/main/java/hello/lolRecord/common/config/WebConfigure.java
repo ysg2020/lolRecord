@@ -31,7 +31,6 @@ public class WebConfigure implements WebMvcConfigurer , WebMvcRegistrations {
                 .excludePathPatterns("/LOLRecord/lolUser","/LOLRecord/lolUser/loginForm","/LOLRecord/lolUser/joinForm"
                                         ,"/LOLRecord/lolUser/login","/LOLRecord/lolUser/logout"
                                         ,"/LOLRecord/lolUser/join"
-                                        ,"/LOLRecord/ReportBoard/**" //임시 추가
                                         ,"/error"
                                         ,"/favicon.ico"
                                         ,"/assets/**","/images/**");
