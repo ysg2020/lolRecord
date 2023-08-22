@@ -40,7 +40,7 @@
             ,SMR_NAME
         FROM SUMMONER
         WHERE 1=1
-            AND SMR_NAME = #{SMR_NAME}
+            AND REPLACE(LOWER(SMR_NAME),' ','') = REPLACE(LOWER(#{SMR_NAME}),' ','')
     </select>
 
     <select id="getSmrUserID" resultMap="SummonerDTO" parameterType="int">

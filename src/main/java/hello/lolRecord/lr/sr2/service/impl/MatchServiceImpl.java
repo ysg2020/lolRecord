@@ -31,7 +31,10 @@ public class MatchServiceImpl implements MatchService {
         SummonerDTO SmrAPI = srRepository.getSmrAPI(nickName);
         List<LeagueEntryDTO> leagueAPI = srRepository.getLeagueAPI(SmrAPI.getId());
         //1-3. 로그인한 유저의 롤 닉네임이 검색한 닉네임과 같으면 유저 ID값 세팅해준다.
-        if(lolUserMybatisRepository.findLOLNick(user_no).equals(nickName)){
+        //대소문자 구분, 공백 없이 비교
+        String lolNick = lolUserMybatisRepository.findLOLNick(user_no).replaceAll(" ","");
+        nickName = nickName.replaceAll(" ","");
+        if(lolNick.equalsIgnoreCase(nickName)){
             SmrAPI.setUserNo(user_no);
         }
         //1-4. DB에 저장 (insert / update)
