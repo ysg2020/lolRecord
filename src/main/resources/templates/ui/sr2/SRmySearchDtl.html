@@ -68,7 +68,11 @@
 
 function search() {
     var nickname = $("#name").val();
-    location.href='/LOLRecord/search2/summoners/'+nickname;
+    if(nickname.trim().length != 0){
+        location.href='/LOLRecord/search2/summoners/'+nickname;
+    }else{
+        alert("닉네임을 입력해주세요.");
+    }
 }
 
 

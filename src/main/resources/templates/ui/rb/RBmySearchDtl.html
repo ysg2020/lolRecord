@@ -59,6 +59,12 @@
 </body>
 </html>
 <script>
+$("#match tr").hover(function(){
+    $(this).css("color","blue");
+}, function(){
+    $(this).css("color","black");
+});
+
 
 function search() {
     var nickname = $("#name").val();
